@@ -1,8 +1,7 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
 import DiceBase from "./DiceBase.ts";
 
-module edu.sonya.cc {
-  export class DiceFace20 extends DiceBase {
+
+  export default class DiceFace20 extends DiceBase {
     protected drawGraphs() {
       const pasteRegionScale = 0.2;
       const pasteRegion = this.SIDE_LENGTH * pasteRegionScale;
@@ -197,7 +196,7 @@ module edu.sonya.cc {
       this.viewBox.bottom = OneY * 3;
     }
 
-    protected drawTexts() {
+    protected setTextsInfo() {
       // 20 text elements.
       this.setSvgTextInfo(
         this.infos[0],
@@ -324,6 +323,3 @@ module edu.sonya.cc {
       );
     }
   }
-}
-
-export default edu.sonya.cc.DiceFace20;

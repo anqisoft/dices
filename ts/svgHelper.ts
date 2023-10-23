@@ -1,11 +1,10 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-import dom from "./dom.ts";
-import storage from "./storage.ts";
+import {I18nable, isI18nable} from "./dom.ts";
+import { getCurrentLang } from "./storage.ts";
 
-const { getCurrentLang } = storage;
-type I18nable = dom.I18nable;
+// https://blog.csdn.net/yiyueqinghui/article/details/108004272
+export const SVG_NS = "http://www.w3.org/2000/svg";
+export const SVG_XLINKNS = "http://www.w3.org/1999/xlink";
 
-module edu.sonya.cc {
   export type ViewBoxType = {
     left: number;
     right: number;
@@ -30,10 +29,6 @@ module edu.sonya.cc {
     alone?: boolean;
     linkToPreview?: boolean;
   };
-
-  // https://blog.csdn.net/yiyueqinghui/article/details/108004272
-  const SVG_NS = "http://www.w3.org/2000/svg";
-  const SVG_XLINKNS = "http://www.w3.org/1999/xlink";
 
   export class SvgHelper {
     public static createSvg = (): SVGElement => {
@@ -108,9 +103,16 @@ module edu.sonya.cc {
       text: SVGTextElement,
       STYLE: string,
       CHAR: string,
-      dx: string,
-      dy: string,
+      dx: string | number,
+      dy: string | number,
     ) {
+      if (typeof dx === 'number') {
+        dx = `${dx}mm`;
+      }
+      if (typeof dy === 'number') {
+        dy = `${dy}mm`;
+      }
+
       // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/tspan
       const tspan = document.createElementNS(
         SVG_NS,
@@ -137,7 +139,7 @@ module edu.sonya.cc {
     public static appendText(
       svg: SVGElement,
       STYLE: string,
-      CONTENT: string,
+      content: (I18nable | string),
       x: number,
       y: number,
       rotate: RotateType,
@@ -173,12 +175,18 @@ module edu.sonya.cc {
       // text.setAttribute('dy', '0');
       // text.setAttribute('rotate', rotate.toString());
 
-      if (CONTENT.indexOf("<en>") > -1) {
+      if (isI18nable(content)) {
+        content = content as I18nable;
+        content = `<en>${content.en}</en><zh_cn>${content.zh_cn}</zh_cn><zh_tw>${content.zh_tw}</zh_tw>`;
+      }
+
+      content = content as string;
+      if (content.indexOf("<en>") > -1) {
         const lang = getCurrentLang();
         const startTag = `<${lang}>`;
         const endTag = `</${lang}>`;
-        if (CONTENT.indexOf(startTag) > -1) {
-          CONTENT = CONTENT.split(startTag)[1].split(endTag)[0];
+        if (content.indexOf(startTag) > -1) {
+          content = content.split(startTag)[1].split(endTag)[0];
         }
       }
 
@@ -213,21 +221,21 @@ module edu.sonya.cc {
       //   });
       // }
 
-      CONTENT = CONTENT.replace(/<br \/>/gi, "<br/>").replace(
+      content = content.replace(/<br \/>/gi, "<br/>").replace(
         /<br\/>/gi,
         "<br>",
       ).replace(
         /\\n/gi,
         "<br>",
       );
-      if (CONTENT.indexOf("<br>") > -1) {
+      if (content.indexOf("<br>") > -1) {
         const fontSize = STYLE.indexOf("font-size:") > -1
           ? STYLE.split("font-size:")[1].split(";")[0]
           : "2mm";
         const unit = fontSize.replace(/[0-9.]/gi, "");
         const dyNumber = parseFloat(fontSize.replace(unit, ""));
         // console.log(fontSize, unit, dyNumber);
-        const segs = CONTENT.split("<br>");
+        const segs = content.split("<br>");
         // let maxLength = 0;
         // segs.forEach((seg)=>{ maxLength = Math.max(maxLength, seg.length); });
         // const dyOffset = `${dyNumber}${unit}`;
@@ -251,11 +259,11 @@ module edu.sonya.cc {
         });
       } else {
         if (maybeNumber) {
-          CONTENT.split("").forEach((char, index) => {
+          content.split("").forEach((char, index) => {
             SvgHelper.appendTspan(text, "", char, "0", "0");
           });
         } else {
-          SvgHelper.appendTspan(text, "", CONTENT, "0", "0");
+          SvgHelper.appendTspan(text, "", content, "0", "0");
         }
       }
 
@@ -301,7 +309,7 @@ module edu.sonya.cc {
       const WIDTH_PX = mmToPxScale * WIDTH;
       const HEIGHT_PX = mmToPxScale * HEIGHT;
 
-      const path = edu.sonya.cc.SvgHelper.createSvgPath();
+      const path = SvgHelper.createSvgPath();
       path.setAttribute("fill", "none");
       path.setAttribute("stroke", OUTER_LINE_COLOR);
       path.setAttribute(
@@ -327,7 +335,7 @@ module edu.sonya.cc {
       svg.setAttribute("height", `${HEIGHT}mm`);
       // svg.setAttribute('style', `width:${WIDTH}mm;height:${HEIGHT}mm;`);
 
-      const { appendLine } = edu.sonya.cc.SvgHelper;
+      const { appendLine } = SvgHelper;
       appendLine(svg, OUTER_LINE_STYLE, 0, WIDTH, 0, 0, null);
       appendLine(svg, OUTER_LINE_STYLE, 0, WIDTH, HEIGHT, HEIGHT, null);
       appendLine(svg, OUTER_LINE_STYLE, 0, 0, 0, HEIGHT, null);
@@ -350,6 +358,3 @@ module edu.sonya.cc {
       return "";
     }
   }
-}
-
-export default edu.sonya.cc;

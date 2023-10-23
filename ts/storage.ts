@@ -1,11 +1,6 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-import edu_sonya_cc_const from "./const.ts";
-import dom from "./dom.ts";
+import { CURRENT_URL, ACTUAL_PAGE_NAME, LANG_PROPERTY } from "./const.ts";
+import { getHtmlElement } from "./dom.ts";
 
-const { CURRENT_URL, ACTUAL_PAGE_NAME, LANG_PROPERTY } = edu_sonya_cc_const;
-const { getHtmlElement } = dom;
-
-module edu.sonya.cc {
   /**
    * <en>Local storage keyword: language, used to record the last selected language</en>
    * <zh_cn>本地存储关键字：语言，用于记录最后一次所选择的语言</zh_cn>
@@ -99,6 +94,3 @@ module edu.sonya.cc {
   export const clearChangeLangNotifyArrayOfCurrentPage = () => {
     CHANGE_LANG_NOTIFY_ARRAY.length = 0;
   };
-}
-
-export default edu.sonya.cc;

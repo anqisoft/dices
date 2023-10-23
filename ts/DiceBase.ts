@@ -1,16 +1,9 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-import dom from "./dom.ts";
-import svgHelper from "./svgHelper.ts";
+import { I18nable } from "./dom.ts";
+import { SvgTextInfo, RotateType, ViewBoxType, SvgHelper } from "./svgHelper.ts";
 
-const { SVG_NS, SVG_XLINKNS } = dom;
-type SvgTextInfo = svgHelper.SvgTextInfo;
-type RotateType = svgHelper.RotateType;
-type ViewBoxType = svgHelper.ViewBoxType;
-
-module edu.sonya.cc {
-  export abstract class DiceBase {
-    protected readonly SVG_NS: string = SVG_NS;
-    protected readonly SVG_XLINKNS: string = SVG_XLINKNS;
+  export default abstract class DiceBase {
+    // protected readonly SVG_NS: string = SVG_NS;
+    // protected readonly SVG_XLINKNS: string = SVG_XLINKNS;
 
     protected svg: SVGElement;
     protected SIDE_LENGTH: number;
@@ -26,13 +19,15 @@ module edu.sonya.cc {
     protected mmToPxScale: number;
 
     protected infos: {
-      content: any;
+      content: (I18nable | string);
       x: number;
       y: number;
       rotate: number | "auto" | "auto-reverse";
     }[];
 
-    protected CONTENTS: any[];
+    protected CONTENTS: (I18nable | string)[];
+    protected PASTE_WIDTH: number;
+    protected TEXT_STYLE: string;
 
     constructor(
       svg: SVGElement,
@@ -43,12 +38,14 @@ module edu.sonya.cc {
       OPTIONS: object,
       mmToPxScale: number,
       infos: {
-        content: any;
+        content: (I18nable | string);
         x: number;
         y: number;
         rotate: number | "auto" | "auto-reverse";
       }[],
-      CONTENTS: any[],
+      CONTENTS: (I18nable | string)[],
+      PASTE_WIDTH: number = 0,
+      TEXT_STYLE: string  = '',
     ) {
       this.svg = svg;
       this.SIDE_LENGTH = SIDE_LENGTH;
@@ -61,106 +58,23 @@ module edu.sonya.cc {
       this.infos = infos;
 
       this.CONTENTS = CONTENTS;
+      this.PASTE_WIDTH = PASTE_WIDTH;
+      this.TEXT_STYLE = TEXT_STYLE;
     }
 
     public draw() {
       this.drawGraphs();
-      this.drawTexts();
+      this.setTextsInfo();
+
+      this.infos.forEach(({ content, x, y, rotate }) => {
+        // SvgHelper.appendText(this.svg, this.TEXT_STYLE, content as string, x, y, rotate, null);
+        SvgHelper.appendText(this.svg, this.TEXT_STYLE, content as string, x, y, rotate, 'center', null, false);
+      });
     }
 
-    protected setSvgTextInfo(
-      info: SvgTextInfo,
-      x: number,
-      y: number,
-      rotate: RotateType,
-    ) {
-      info.x = x;
-      info.y = y;
-      info.rotate = rotate;
-    }
-
-    protected appendLine(
-      svg: SVGElement,
-      STYLE: string,
-      x1: number,
-      x2: number,
-      y1: number,
-      y2: number,
-      viewBox: ViewBoxType | null,
-    ) {
-      const line = document.createElementNS(SVG_NS, "line") as SVGLineElement;
-      line.setAttribute("x1", `${x1}mm`);
-      line.setAttribute("x2", `${x2}mm`);
-      line.setAttribute("y1", `${y1}mm`);
-      line.setAttribute("y2", `${y2}mm`);
-
-      if (viewBox) {
-        viewBox.left = Math.min(viewBox.left, x1, x2);
-        viewBox.right = Math.max(viewBox.right, x1, x2);
-        viewBox.top = Math.min(viewBox.top, y1, y2);
-        viewBox.bottom = Math.max(viewBox.bottom, y1, y2);
-      }
-
-      line.setAttribute("style", STYLE);
-      svg.appendChild(line);
-    }
-
-    protected appendCircle(
-      svg: SVGElement,
-      STYLE: string,
-      cx: number,
-      cy: number,
-      radius: number,
-      viewBox: ViewBoxType | null,
-    ) {
-      const circle = document.createElementNS(
-        SVG_NS,
-        "circle",
-      ) as SVGCircleElement;
-      circle.setAttribute("cx", `${cx}mm`);
-      circle.setAttribute("cy", `${cy}mm`);
-      circle.setAttribute("r", `${radius}mm`);
-      circle.setAttribute("fill", "#ffffff");
-
-      if (viewBox) {
-        viewBox.left = Math.min(viewBox.left, cx - radius);
-        viewBox.right = Math.max(viewBox.right, cx + radius);
-        viewBox.top = Math.min(viewBox.top, cy - radius);
-        viewBox.bottom = Math.max(viewBox.bottom, cy + radius);
-      }
-
-      circle.setAttribute("style", STYLE);
-      svg.appendChild(circle);
-    }
-
-    protected appendTspan(
-      text: SVGTextElement,
-      STYLE: string,
-      CHAR: string,
-      dx: number,
-      dy: number,
-      rotate: RotateType,
-    ) {
-      // https://developer.mozilla.org/en-US/docs/Web/SVG/Element/tspan
-      const tspan = document.createElementNS(
-        SVG_NS,
-        "tspan",
-      ) as SVGTSpanElement;
-      tspan.setAttribute("dx", `${dx}mm`);
-      tspan.setAttribute("dy", `${dy}mm`);
-      tspan.setAttribute("rotate", rotate.toString());
-      tspan.setAttribute(
-        "style",
-        STYLE.concat(
-          "dominant-baseline:middle;text-anchor:middle;",
-          CHAR === "6" || CHAR === "9" ? "text-decoration:underline;" : "",
-          CHAR === "ü" ? "opacity:0.85;font-size:0.9em;" : "",
-        ),
-      );
-
-      tspan.innerHTML = CHAR;
-      text.appendChild(tspan);
-    }
+    protected setSvgTextInfo = SvgHelper.setSvgTextInfo;
+    protected appendLine = SvgHelper.appendLine;
+    protected appendCircle = SvgHelper.appendCircle;
 
     protected getSinByAngle(angle: number) {
       return Math.sin(angle * Math.PI / 180);
@@ -172,8 +86,12 @@ module edu.sonya.cc {
     // protected fixContent(content)  { return content.toString().replace(/([69])/gi, '<font style="text-decoration:underline;">$1</font>'); }
 
     protected abstract drawGraphs(): void;
-    protected abstract drawTexts(): void;
-  }
-}
+    protected abstract setTextsInfo(): void;
 
-export default edu.sonya.cc.DiceBase;
+    protected drawInnerLine(x1: number, x2: number, y1:number, y2: number) {
+      SvgHelper.appendLine(this.svg, this.INNER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
+    }
+    protected drawOuterLine(x1: number, x2: number, y1:number, y2: number) {
+      SvgHelper.appendLine(this.svg, this.OUTER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
+    }
+  }

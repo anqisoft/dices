@@ -1,8 +1,7 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
 import DiceBase from "./DiceBase.ts";
 
-module edu.sonya.cc {
-  export class DiceFaceSubClass extends DiceBase {
+
+  export default class DiceFaceSubClass extends DiceBase {
     protected drawGraphs() {
       const ANGLE = 48.275;
       const { getSinByAngle, getCosByAngle } = this;
@@ -996,7 +995,7 @@ module edu.sonya.cc {
       );
     }
 
-    protected drawTexts() {
+    protected setTextsInfo() {
       // this.setSvgTextInfo(infos[0], SIDE_LENGTH * 36.5 / 25, SIDE_LENGTH * 100.0 / 25, 180);
       // this.setSvgTextInfo(infos[1], SIDE_LENGTH * 147.5 / 25, SIDE_LENGTH * 125.0 / 25, 180);
       // this.setSvgTextInfo(infos[2], SIDE_LENGTH * 84.0 / 25, SIDE_LENGTH * 132.0 / 25, -70.35);
@@ -1174,6 +1173,3 @@ module edu.sonya.cc {
       );
     }
   }
-}
-
-export default edu.sonya.cc.DiceFaceSubClass;

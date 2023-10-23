@@ -1,9 +1,7 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-
 import DiceBase from "./DiceBase.ts";
 
-module edu.sonya.cc {
-  export class DiceFace4 extends DiceBase {
+
+  export default class DiceFace4 extends DiceBase {
     protected drawGraphs() {
       const HEIGHT_OF_ONE = this.SIDE_LENGTH * 1.732 * 0.5;
       const HEIGHT_OF_TWO = HEIGHT_OF_ONE * 2;
@@ -233,7 +231,7 @@ module edu.sonya.cc {
       );
     }
 
-    protected drawTexts() {
+    protected setTextsInfo() {
       // 12 text elements.
 
       // this.setSvgTextInfo(infos[0], SIDE_LENGTH * 25.0 / 25, SIDE_LENGTH * 18.0 / 25, 0);
@@ -404,6 +402,3 @@ module edu.sonya.cc {
       }
     }
   }
-}
-
-export default edu.sonya.cc.DiceFace4;

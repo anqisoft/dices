@@ -1,13 +1,7 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-
-import dom from "./dom.ts";
+import { createElement, I18nable } from "./dom.ts"; // appendText, 
 import DPIHelper from "./DPIHelper.ts";
-import svgHelper from "./svgHelper.ts";
+import {SvgTextInfo, SVG_NS, SVG_XLINKNS} from "./svgHelper.ts";
 
-type SvgTextInfo = svgHelper.SvgTextInfo;
-
-const { createElement, appendText, SVG_NS, SVG_XLINKNS } = dom;
-type I18nable = dom.I18nable;
 
 import DiceFace4 from "./DiceFace4.ts";
 import DiceFace6 from "./DiceFace6.ts";
@@ -27,7 +21,7 @@ import DiceFace60 from "./DiceFace60.ts";
 // /// <reference path='../types/DPIHelper.d.ts' />
 // /// <reference path='../types/svgHelper.d.ts' />
 
-module edu.sonya.cc {
+
   /**
    * <en>Dice Type</en>
    * <zh_cn>骰子类型</zh_cn>
@@ -398,9 +392,6 @@ module edu.sonya.cc {
         default:
           break;
       }
-      infos.forEach(({ content, x, y, rotate }) => {
-        appendText(svg, TEXT_STYLE, content as string, x, y, rotate, null);
-      });
 
       const width = `${viewBox.right}mm`;
       const height = `${viewBox.bottom}mm`;
@@ -444,11 +435,10 @@ module edu.sonya.cc {
     }
 
     private createSvg = (): SVGElement => {
-      const svg = document.createElementNS(SVG_NS, "svg") as SVGElement;
+      const svg = document.createElementNS(SVG_NS,"svg") as unknown as SVGElement;
       svg.setAttribute("version", "1.1");
       svg.setAttribute("xmlns", SVG_NS);
       svg.setAttribute("xmlns:xlink", SVG_XLINKNS);
       return svg;
     };
   }
-}

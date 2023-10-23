@@ -1,6 +1,4 @@
-// deno-lint-ignore-file no-namespace prefer-namespace-keyword
-module edu.sonya.cc {
-  export class DPIHelper {
+  export default class DPIHelper {
     private dpiArray: Array<number> = [];
     private dpiX = 0;
     private mmToPxScale = 0;
@@ -41,6 +39,3 @@ module edu.sonya.cc {
 
     public getPxToMmScale = () => this.pxToMmScale;
   }
-}
-
-export default edu.sonya.cc.DPIHelper;
