@@ -1,9 +1,9 @@
-import DiceBase from "./DiceBase.ts";
+import DiceBase from './DiceBase.ts';
 
 export default class DiceFaceSubClass extends DiceBase {
-  protected drawGraphs() {
-  }
+	protected drawGraphs() {
+	}
 
-  protected setTextsInfo() {
-  }
+	protected setTextsInfo() {
+	}
 }

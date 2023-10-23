@@ -50,13 +50,13 @@ getPageParameterByName("kind", null);
 parseInt(getPageParameterByName("page", "1"), 0) - 1;
 parseInt(getPageParameterByName("id", "1"), 0);
 const LANG_PROPERTY = "edu-lang";
+function getHtmlElement() {
+    return document.getElementsByTagName("html")[0];
+}
 const LOCAL_STORAGE_KEY_OF_LANG = "lang";
 const LOCAL_STORAGE_KEY_OF_CURRENT_PAGE = CURRENT_URL.includes("?") ? CURRENT_URL.split("?")[1] : ACTUAL_PAGE_NAME;
 const CHANGE_LANG_NOTIFY_ARRAY = [];
 const getCurrentLang = ()=>localStorage.getItem(LOCAL_STORAGE_KEY_OF_LANG) || "zh_cn";
-function getHtmlElement() {
-    return document.getElementsByTagName("html")[0];
-}
 const setCurrentLang = (lang)=>{
     getHtmlElement().setAttribute(LANG_PROPERTY, lang);
     localStorage.setItem(LOCAL_STORAGE_KEY_OF_LANG, lang);

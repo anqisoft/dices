@@ -49,13 +49,45 @@ const getPageParameterByName = (name, defaultValue)=>{
 getPageParameterByName("kind", null);
 parseInt(getPageParameterByName("page", "1"), 0) - 1;
 parseInt(getPageParameterByName("id", "1"), 0);
-const SVG_NS = "http://www.w3.org/2000/svg";
-const LOCAL_STORAGE_KEY_OF_LANG = "lang";
+function isI18nable(object) {
+    return typeof object.en === 'string' && typeof object.zh_cn === 'string' && typeof object.zh_tw === 'string';
+}
 function createElement(tagName, options) {
     return document.createElement(tagName, options);
 }
+class DPIHelper {
+    dpiArray = [];
+    dpiX = 0;
+    mmToPxScale = 0;
+    pxToMmScale = 0;
+    constructor(){
+        const screen = window.screen;
+        const { dpiArray } = this;
+        if (screen.deviceXDPI) {
+            dpiArray.push(screen.deviceXDPI);
+            dpiArray.push(screen.deviceYDPI);
+        } else {
+            const div = document.createElement("div");
+            div.style.cssText = "width:1in;height:1in;position:absolute;left:0px;top:0px;z-index:99;visibility:hidden";
+            document.body.appendChild(div);
+            dpiArray.push(parseInt(div.offsetWidth.toString()));
+            dpiArray.push(parseInt(div.offsetHeight.toString()));
+            document.body.removeChild(div);
+        }
+        const dpiX = dpiArray[0];
+        this.dpiX = dpiX;
+        this.mmToPxScale = dpiX / 25.4;
+        this.pxToMmScale = 25.4 / dpiX;
+    }
+    convertPxToMm = (px)=>px / this.dpiX * 25.4;
+    convertMmToPx = (mm)=>mm / 25.4 * this.dpiX;
+    getMmToPxScale = ()=>this.mmToPxScale;
+    getPxToMmScale = ()=>this.pxToMmScale;
+}
+const LOCAL_STORAGE_KEY_OF_LANG = "lang";
 CURRENT_URL.includes("?") ? CURRENT_URL.split("?")[1] : ACTUAL_PAGE_NAME;
 const getCurrentLang = ()=>localStorage.getItem(LOCAL_STORAGE_KEY_OF_LANG) || "zh_cn";
+const SVG_NS = "http://www.w3.org/2000/svg";
 const SVG_XLINKNS = "http://www.w3.org/1999/xlink";
 class SvgHelper {
     static createSvg = ()=>{
@@ -99,6 +131,12 @@ class SvgHelper {
         svg.appendChild(circle);
     }
     static appendTspan(text, STYLE, CHAR, dx, dy) {
+        if (typeof dx === 'number') {
+            dx = `${dx}mm`;
+        }
+        if (typeof dy === 'number') {
+            dy = `${dy}mm`;
+        }
         const tspan = document.createElementNS(SVG_NS, "tspan");
         tspan.setAttribute("dx", `${dx}`);
         tspan.setAttribute("dy", `${dy}`);
@@ -106,7 +144,7 @@ class SvgHelper {
         tspan.innerHTML = CHAR;
         text.appendChild(tspan);
     }
-    static appendText(svg, STYLE, CONTENT, x, y, rotate, transformOrigin, viewBox, maybeNumber = false) {
+    static appendText(svg, STYLE, content, x, y, rotate, transformOrigin, viewBox, maybeNumber = false) {
         const g = document.createElementNS(SVG_NS, "g");
         if (rotate) {
             g.setAttribute("style", `transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`);
@@ -116,20 +154,25 @@ class SvgHelper {
         text.setAttribute("x", `${x}mm`);
         text.setAttribute("y", `${y}mm`);
         text.setAttribute("style", "dominant-baseline:middle;text-anchor:middle;");
-        if (CONTENT.indexOf("<en>") > -1) {
+        if (isI18nable(content)) {
+            content = content;
+            content = `<en>${content.en}</en><zh_cn>${content.zh_cn}</zh_cn><zh_tw>${content.zh_tw}</zh_tw>`;
+        }
+        content = content;
+        if (content.indexOf("<en>") > -1) {
             const lang = getCurrentLang();
             const startTag = `<${lang}>`;
             const endTag = `</${lang}>`;
-            if (CONTENT.indexOf(startTag) > -1) {
-                CONTENT = CONTENT.split(startTag)[1].split(endTag)[0];
+            if (content.indexOf(startTag) > -1) {
+                content = content.split(startTag)[1].split(endTag)[0];
             }
         }
-        CONTENT = CONTENT.replace(/<br \/>/gi, "<br/>").replace(/<br\/>/gi, "<br>").replace(/\\n/gi, "<br>");
-        if (CONTENT.indexOf("<br>") > -1) {
+        content = content.replace(/<br \/>/gi, "<br/>").replace(/<br\/>/gi, "<br>").replace(/\\n/gi, "<br>");
+        if (content.indexOf("<br>") > -1) {
             const fontSize = STYLE.indexOf("font-size:") > -1 ? STYLE.split("font-size:")[1].split(";")[0] : "2mm";
             const unit = fontSize.replace(/[0-9.]/gi, "");
             const dyNumber = parseFloat(fontSize.replace(unit, ""));
-            const segs = CONTENT.split("<br>");
+            const segs = content.split("<br>");
             let lastLength = 0;
             const dyOffset = `${dyNumber}${unit}`;
             segs.forEach((seg, index)=>{
@@ -138,11 +181,11 @@ class SvgHelper {
             });
         } else {
             if (maybeNumber) {
-                CONTENT.split("").forEach((__char, index)=>{
+                content.split("").forEach((__char, index)=>{
                     SvgHelper.appendTspan(text, "", __char, "0", "0");
                 });
             } else {
-                SvgHelper.appendTspan(text, "", CONTENT, "0", "0");
+                SvgHelper.appendTspan(text, "", content, "0", "0");
             }
         }
         g.appendChild(text);
@@ -191,68 +234,7 @@ class SvgHelper {
         return "";
     }
 }
-function appendText(svg, STYLE, CONTENT, x, y, rotate, viewBox) {
-    const g = document.createElementNS(SVG_NS1, "g");
-    if (rotate) {
-        g.setAttribute("style", `transform: rotate(${rotate}deg);transform-origin: 50% 50%;`);
-    }
-    svg.appendChild(g);
-    const text = document.createElementNS(SVG_NS1, "text");
-    text.setAttribute("x", `${x}mm`);
-    text.setAttribute("y", `${y}mm`);
-    text.setAttribute("style", "dominant-baseline:middle;text-anchor:middle;");
-    if (CONTENT.indexOf("<") > -1) {
-        text.innerHTML = CONTENT;
-    } else {
-        CONTENT.split("").forEach((__char, index)=>{
-            SvgHelper.appendTspan(text, "", __char, "0", "0");
-        });
-    }
-    g.appendChild(text);
-    if (viewBox) {
-        const clientRects = text.getClientRects();
-        const { left: x1, right: x2, top: y1, bottom: y2 } = clientRects.length ? clientRects.item(0) : text.getBoundingClientRect();
-        viewBox.left = Math.min(viewBox.left, x1, x2);
-        viewBox.right = Math.max(viewBox.right, x1, x2);
-        viewBox.top = Math.min(viewBox.top, y1, y2);
-        viewBox.bottom = Math.max(viewBox.bottom, y1, y2);
-    }
-    text.setAttribute("style", STYLE);
-}
-const SVG_NS1 = "http://www.w3.org/2000/svg";
-const SVG_XLINKNS1 = "http://www.w3.org/1999/xlink";
-class DPIHelper {
-    dpiArray = [];
-    dpiX = 0;
-    mmToPxScale = 0;
-    pxToMmScale = 0;
-    constructor(){
-        const screen = window.screen;
-        const { dpiArray } = this;
-        if (screen.deviceXDPI) {
-            dpiArray.push(screen.deviceXDPI);
-            dpiArray.push(screen.deviceYDPI);
-        } else {
-            const div = document.createElement("div");
-            div.style.cssText = "width:1in;height:1in;position:absolute;left:0px;top:0px;z-index:99;visibility:hidden";
-            document.body.appendChild(div);
-            dpiArray.push(parseInt(div.offsetWidth.toString()));
-            dpiArray.push(parseInt(div.offsetHeight.toString()));
-            document.body.removeChild(div);
-        }
-        const dpiX = dpiArray[0];
-        this.dpiX = dpiX;
-        this.mmToPxScale = dpiX / 25.4;
-        this.pxToMmScale = 25.4 / dpiX;
-    }
-    convertPxToMm = (px)=>px / this.dpiX * 25.4;
-    convertMmToPx = (mm)=>mm / 25.4 * this.dpiX;
-    getMmToPxScale = ()=>this.mmToPxScale;
-    getPxToMmScale = ()=>this.pxToMmScale;
-}
 class DiceBase {
-    SVG_NS = SVG_NS1;
-    SVG_XLINKNS = SVG_XLINKNS1;
     svg;
     SIDE_LENGTH;
     INNER_LINE_STYLE;
@@ -262,7 +244,9 @@ class DiceBase {
     mmToPxScale;
     infos;
     CONTENTS;
-    constructor(svg, SIDE_LENGTH, INNER_LINE_STYLE, OUTER_LINE_STYLE, viewBox, OPTIONS, mmToPxScale, infos, CONTENTS){
+    PASTE_WIDTH;
+    TEXT_STYLE;
+    constructor(svg, SIDE_LENGTH, INNER_LINE_STYLE, OUTER_LINE_STYLE, viewBox, OPTIONS, mmToPxScale, infos, CONTENTS, PASTE_WIDTH = 0, TEXT_STYLE = ''){
         this.svg = svg;
         this.SIDE_LENGTH = SIDE_LENGTH;
         this.INNER_LINE_STYLE = INNER_LINE_STYLE;
@@ -272,60 +256,30 @@ class DiceBase {
         this.mmToPxScale = mmToPxScale;
         this.infos = infos;
         this.CONTENTS = CONTENTS;
+        this.PASTE_WIDTH = PASTE_WIDTH;
+        this.TEXT_STYLE = TEXT_STYLE;
     }
     draw() {
         this.drawGraphs();
         this.setTextsInfo();
+        this.infos.forEach(({ content, x, y, rotate })=>{
+            SvgHelper.appendText(this.svg, this.TEXT_STYLE, content, x, y, rotate, 'center', null, false);
+        });
     }
-    setSvgTextInfo(info, x, y, rotate) {
-        info.x = x;
-        info.y = y;
-        info.rotate = rotate;
-    }
-    appendLine(svg, STYLE, x1, x2, y1, y2, viewBox) {
-        const line = document.createElementNS(SVG_NS1, "line");
-        line.setAttribute("x1", `${x1}mm`);
-        line.setAttribute("x2", `${x2}mm`);
-        line.setAttribute("y1", `${y1}mm`);
-        line.setAttribute("y2", `${y2}mm`);
-        if (viewBox) {
-            viewBox.left = Math.min(viewBox.left, x1, x2);
-            viewBox.right = Math.max(viewBox.right, x1, x2);
-            viewBox.top = Math.min(viewBox.top, y1, y2);
-            viewBox.bottom = Math.max(viewBox.bottom, y1, y2);
-        }
-        line.setAttribute("style", STYLE);
-        svg.appendChild(line);
-    }
-    appendCircle(svg, STYLE, cx, cy, radius, viewBox) {
-        const circle = document.createElementNS(SVG_NS1, "circle");
-        circle.setAttribute("cx", `${cx}mm`);
-        circle.setAttribute("cy", `${cy}mm`);
-        circle.setAttribute("r", `${radius}mm`);
-        circle.setAttribute("fill", "#ffffff");
-        if (viewBox) {
-            viewBox.left = Math.min(viewBox.left, cx - radius);
-            viewBox.right = Math.max(viewBox.right, cx + radius);
-            viewBox.top = Math.min(viewBox.top, cy - radius);
-            viewBox.bottom = Math.max(viewBox.bottom, cy + radius);
-        }
-        circle.setAttribute("style", STYLE);
-        svg.appendChild(circle);
-    }
-    appendTspan(text, STYLE, CHAR, dx, dy, rotate) {
-        const tspan = document.createElementNS(SVG_NS1, "tspan");
-        tspan.setAttribute("dx", `${dx}mm`);
-        tspan.setAttribute("dy", `${dy}mm`);
-        tspan.setAttribute("rotate", rotate.toString());
-        tspan.setAttribute("style", STYLE.concat("dominant-baseline:middle;text-anchor:middle;", CHAR === "6" || CHAR === "9" ? "text-decoration:underline;" : "", CHAR === "ü" ? "opacity:0.85;font-size:0.9em;" : ""));
-        tspan.innerHTML = CHAR;
-        text.appendChild(tspan);
-    }
+    setSvgTextInfo = SvgHelper.setSvgTextInfo;
+    appendLine = SvgHelper.appendLine;
+    appendCircle = SvgHelper.appendCircle;
     getSinByAngle(angle) {
         return Math.sin(angle * Math.PI / 180);
     }
     getCosByAngle(angle) {
         return Math.cos(angle * Math.PI / 180);
+    }
+    drawInnerLine(x1, x2, y1, y2) {
+        SvgHelper.appendLine(this.svg, this.INNER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
+    }
+    drawOuterLine(x1, x2, y1, y2) {
+        SvgHelper.appendLine(this.svg, this.OUTER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
     }
 }
 class DiceFace4 extends DiceBase {
@@ -1206,9 +1160,6 @@ class DiceGenerator {
             default:
                 break;
         }
-        infos.forEach(({ content, x, y, rotate })=>{
-            appendText(svg, TEXT_STYLE, content, x, y, rotate, null);
-        });
         const width = `${viewBox.right}mm`;
         const height = `${viewBox.bottom}mm`;
         svg.setAttribute("width", width);
@@ -1234,10 +1185,10 @@ class DiceGenerator {
         return result;
     }
     createSvg = ()=>{
-        const svg = document.createElementNS(SVG_NS1, "svg");
+        const svg = document.createElementNS(SVG_NS, "svg");
         svg.setAttribute("version", "1.1");
-        svg.setAttribute("xmlns", SVG_NS1);
-        svg.setAttribute("xmlns:xlink", SVG_XLINKNS1);
+        svg.setAttribute("xmlns", SVG_NS);
+        svg.setAttribute("xmlns:xlink", SVG_XLINKNS);
         return svg;
     };
 }

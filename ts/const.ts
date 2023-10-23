@@ -3,14 +3,14 @@
  * <zh_cn>网站域名</zh_cn>
  * <zh_tw>網站域名</zh_tw>
  */
-export const DOMAIN = "edu.sonya.cc";
+export const DOMAIN = 'edu.sonya.cc';
 
 /**
  * <en>Postfix of file name</en>
  * <zh_cn>文件名前綴</zh_cn>
  * <zh_tw>文件名前綴</zh_tw>
  */
-export const FILENAME_POSTFIX = DOMAIN.concat("_");
+export const FILENAME_POSTFIX = DOMAIN.concat('_');
 
 /**
  * <en>Current URL</en>
@@ -24,9 +24,9 @@ export const CURRENT_URL = window.location.href;
  * <zh_cn>首页网址</zh_cn>
  * <zh_tw>首頁網址</zh_tw>
  */
-export const HOME_URL = CURRENT_URL.startsWith("file:///")
-  ? "file:///P:/ecs_person/websites/sonya.cc/edu_git/src/index.htm"
-  : "http://edu.sonya.cc/";
+export const HOME_URL = CURRENT_URL.startsWith('file:///')
+	? 'file:///P:/ecs_person/websites/sonya.cc/edu_git/src/index.htm'
+	: 'http://edu.sonya.cc/';
 
 /**
  * <en>Temporary closure method: avoid being displayed in iframe by other websites.</en>
@@ -34,16 +34,16 @@ export const HOME_URL = CURRENT_URL.startsWith("file:///")
  * <zh_tw>臨時閉包方法：避免被其它網站放入iframe中顯示。</zh_tw>
  */
 (function () {
-  const myWindow = window as unknown as {
-    top?: { location: { href: string; replace: (newUrl: string) => void } };
-  };
-  // alert(JSON.stringify(myWindow.top));
-  // console.log(myWindow.top?.location.href);
+	const myWindow = window as unknown as {
+		top?: { location: { href: string; replace: (newUrl: string) => void } };
+	};
+	// alert(JSON.stringify(myWindow.top));
+	// console.log(myWindow.top?.location.href);
 
-  if (!myWindow.top || CURRENT_URL.startsWith("file:///")) return;
-  if (!myWindow.top.location.href.startsWith(HOME_URL)) {
-    myWindow.top.location.replace(HOME_URL);
-  }
+	if (!myWindow.top || CURRENT_URL.startsWith('file:///')) return;
+	if (!myWindow.top.location.href.startsWith(HOME_URL)) {
+		myWindow.top.location.replace(HOME_URL);
+	}
 })();
 
 /**
@@ -59,54 +59,54 @@ export const HOME_URL_LENGTH = HOME_URL.length;
  * <zh_tw>枚舉：實際頁面</zh_tw>
  */
 export enum ActualPage {
-  /**
-   * <en>Home page</en>
-   * <zh_cn>首页</zh_cn>
-   * <zh_tw>首頁</zh_tw>
-   */
-  home,
-  /**
-   * <en>List of throwing a brick to attract jade</en>
-   * <zh_cn>抛砖引玉列表</zh_cn>
-   * <zh_tw>抛磚引玉清單</zh_tw>
-   */
-  bricks,
-  /**
-   * <en>Details of throwing a brick to attract jade</en>
-   * <zh_cn>抛砖引玉详情</zh_cn>
-   * <zh_tw>抛磚引玉詳情</zh_tw>
-   */
-  brick,
-  /**
-   * <en>Natural treasures</en>
-   * <zh_cn>物华天宝</zh_cn>
-   * <zh_tw>物華天寶</zh_tw>
-   */
-  treasures,
-  /**
-   * <en>List of growth footprint</en>
-   * <zh_cn>成长足迹列表</zh_cn>
-   * <zh_tw>成長足迹清單</zh_tw>
-   */
-  stories,
-  /**
-   * <en>Details of growth footprint</en>
-   * <zh_cn>成长足迹详情</zh_cn>
-   * <zh_tw>成長足迹詳情</zh_tw>
-   */
-  story,
-  /**
-   * <en>Sparks of Fire</en>
-   * <zh_cn>星星之火</zh_cn>
-   * <zh_tw>星星之火</zh_tw>
-   */
-  about,
-  /**
-   * <en>Report form</en>
-   * <zh_cn>报表</zh_cn>
-   * <zh_tw>報表</zh_tw>
-   */
-  report,
+	/**
+	 * <en>Home page</en>
+	 * <zh_cn>首页</zh_cn>
+	 * <zh_tw>首頁</zh_tw>
+	 */
+	home,
+	/**
+	 * <en>List of throwing a brick to attract jade</en>
+	 * <zh_cn>抛砖引玉列表</zh_cn>
+	 * <zh_tw>抛磚引玉清單</zh_tw>
+	 */
+	bricks,
+	/**
+	 * <en>Details of throwing a brick to attract jade</en>
+	 * <zh_cn>抛砖引玉详情</zh_cn>
+	 * <zh_tw>抛磚引玉詳情</zh_tw>
+	 */
+	brick,
+	/**
+	 * <en>Natural treasures</en>
+	 * <zh_cn>物华天宝</zh_cn>
+	 * <zh_tw>物華天寶</zh_tw>
+	 */
+	treasures,
+	/**
+	 * <en>List of growth footprint</en>
+	 * <zh_cn>成长足迹列表</zh_cn>
+	 * <zh_tw>成長足迹清單</zh_tw>
+	 */
+	stories,
+	/**
+	 * <en>Details of growth footprint</en>
+	 * <zh_cn>成长足迹详情</zh_cn>
+	 * <zh_tw>成長足迹詳情</zh_tw>
+	 */
+	story,
+	/**
+	 * <en>Sparks of Fire</en>
+	 * <zh_cn>星星之火</zh_cn>
+	 * <zh_tw>星星之火</zh_tw>
+	 */
+	about,
+	/**
+	 * <en>Report form</en>
+	 * <zh_cn>报表</zh_cn>
+	 * <zh_tw>報表</zh_tw>
+	 */
+	report,
 }
 
 /**
@@ -115,14 +115,14 @@ export enum ActualPage {
  * <zh_tw>數組：實際頁面枚舉值</zh_tw>
  */
 export const ACTUAL_PAGE_NAME_ARRAY = [
-  "home",
-  "bricks",
-  "brick",
-  "treasures",
-  "stories",
-  "story",
-  "about",
-  "report",
+	'home',
+	'bricks',
+	'brick',
+	'treasures',
+	'stories',
+	'story',
+	'about',
+	'report',
 ];
 
 /**
@@ -130,8 +130,7 @@ export const ACTUAL_PAGE_NAME_ARRAY = [
  * <zh_cn>转数字到实际页面名</zh_cn>
  * <zh_tw>轉數位到實際頁面名</zh_tw>
  */
-export const getActualPageName = (value: ActualPage) =>
-  ACTUAL_PAGE_NAME_ARRAY[value];
+export const getActualPageName = (value: ActualPage) => ACTUAL_PAGE_NAME_ARRAY[value];
 
 /**
  * <en>Convert the actual page name to the enumeration value
@@ -140,15 +139,14 @@ Convert the actual page name to the enumeration value.</en>
 * <zh_cn>转实际页面名到枚举值</zh_cn>
 * <zh_tw>轉實際頁面名到枚舉值</zh_tw>
 */
-export const getActualPageValueByName = (name: string) =>
-  ACTUAL_PAGE_NAME_ARRAY.indexOf(name);
+export const getActualPageValueByName = (name: string) => ACTUAL_PAGE_NAME_ARRAY.indexOf(name);
 
 /**
  * <en>Page parameter: actual page. If it exists, it must be the first parameter.</en>
  * <zh_cn>页面参数：实际页面。如果存在，必须是第一个参数。</zh_cn>
  * <zh_tw>頁面參數：實際頁面。如果存在，必須是第一個參數。</zh_tw>
  */
-export const PARAMETER_FOR_ACTUAL_PAGE = "go";
+export const PARAMETER_FOR_ACTUAL_PAGE = 'go';
 
 /**
  * <en>Page parameter value: actual page</en>
@@ -156,11 +154,11 @@ export const PARAMETER_FOR_ACTUAL_PAGE = "go";
  * <zh_tw>頁面參數值：實際頁面</zh_tw>
  */
 export const ACTUAL_PAGE_VALUE =
-  CURRENT_URL.indexOf("?".concat(PARAMETER_FOR_ACTUAL_PAGE, "=")) > -1
-    ? getActualPageValueByName(
-      CURRENT_URL.split("?")[1].split("&")[0].split("=")[1],
-    )
-    : ActualPage.home;
+	CURRENT_URL.indexOf('?'.concat(PARAMETER_FOR_ACTUAL_PAGE, '=')) > -1
+		? getActualPageValueByName(
+			CURRENT_URL.split('?')[1].split('&')[0].split('=')[1],
+		)
+		: ActualPage.home;
 
 /**
  * <en>Current actual page name</en>
@@ -174,7 +172,7 @@ export const ACTUAL_PAGE_NAME = ACTUAL_PAGE_NAME_ARRAY[ACTUAL_PAGE_VALUE];
  * <zh_cn>网站根目录</zh_cn>
  * <zh_tw>網站根目錄</zh_tw>
  */
-export const SITE_ROOT = HOME_URL.substring(0, HOME_URL.lastIndexOf("/") + 1);
+export const SITE_ROOT = HOME_URL.substring(0, HOME_URL.lastIndexOf('/') + 1);
 
 /**
  * <en>Website image directory</en>
@@ -215,14 +213,14 @@ export const SITE_CSS_PATH = `${SITE_ROOT}css/`;
  * <zh_tw>參數值</zh_tw>
  */
 export const getPageParameterByName = (
-  name: string,
-  defaultValue: string | null,
+	name: string,
+	defaultValue: string | null,
 ) => {
-  return CURRENT_URL.indexOf(`&${name}=`) === -1
-    ? defaultValue || ""
-    : CURRENT_URL.split("&").slice(1).filter((keyValue: string) =>
-      keyValue.startsWith(`${name}=`)
-    )[0].split("=")[1];
+	return CURRENT_URL.indexOf(`&${name}=`) === -1
+		? defaultValue || ''
+		: CURRENT_URL.split('&').slice(1).filter((keyValue: string) =>
+			keyValue.startsWith(`${name}=`)
+		)[0].split('=')[1];
 };
 
 /**
@@ -230,30 +228,29 @@ export const getPageParameterByName = (
  * <zh_cn>页面子类型</zh_cn>
  * <zh_tw>頁面子類型</zh_tw>
  */
-export const PAGE_SUB_KIND = getPageParameterByName("kind", null);
+export const PAGE_SUB_KIND = getPageParameterByName('kind', null);
 
 /**
  * <en>Page Index</en>
  * <zh_cn>页序</zh_cn>
  * <zh_tw>頁序</zh_tw>
  */
-export const PAGE_IDNEX = parseInt(getPageParameterByName("page", "1"), 0) -
-  1;
+export const PAGE_IDNEX = parseInt(getPageParameterByName('page', '1'), 0) -
+	1;
 
 /**
  * <en>Page parameter: No</en>
  * <zh_cn>页面参数：编号</zh_cn>
  * <zh_tw>頁面參數：編號</zh_tw>
  */
-export const PAGE_ID = parseInt(getPageParameterByName("id", "1"), 0);
+export const PAGE_ID = parseInt(getPageParameterByName('id', '1'), 0);
 
 /**
  * <en>“查看更多”按钮文字</en>
  * <zh_cn>View more button text</zh_cn>
  * <zh_tw>“查看更多”按鈕文字</zh_tw>
  */
-export const MORE_BUTTON_HTML =
-  "<en>more...</en><zh_cn>查看更多</zh_cn><zh_tw>查看更多</zh_tw>";
+export const MORE_BUTTON_HTML = '<en>more...</en><zh_cn>查看更多</zh_cn><zh_tw>查看更多</zh_tw>';
 
 /**
  * <en>Type of throwing bricks to attract jade</en>
@@ -261,42 +258,42 @@ export const MORE_BUTTON_HTML =
  * <zh_tw>抛磚引玉子類型</zh_tw>
  */
 export const BRICK_SUB_KINDS = [
-  /**
-   * <en>Chinese</en>
-   * <zh_cn>语文</zh_cn>
-   * <zh_tw>語文</zh_tw>
-   */
-  {
-    name: "01_chinese",
-    title: { en: "Chinese", zh_cn: "语文", zh_tw: "語文" },
-  },
-  /**
-   * <en>Mathematics</en>
-   * <zh_cn>数学</zh_cn>
-   * <zh_tw>數學</zh_tw>
-   */
-  {
-    name: "02_math",
-    title: { en: "Mathematics", zh_cn: "数学", zh_tw: "數學" },
-  },
-  /**
-   * <en>English</en>
-   * <zh_cn>英语</zh_cn>
-   * <zh_tw>英語</zh_tw>
-   */
-  {
-    name: "03_english",
-    title: { en: "English", zh_cn: "英语", zh_tw: "英語" },
-  },
-  /**
-   * <en>Programming</en>
-   * <zh_cn>编程</zh_cn>
-   * <zh_tw>程式設計</zh_tw>
-   */
-  {
-    name: "04_programming",
-    title: { en: "Programming", zh_cn: "编程", zh_tw: "程式設計" },
-  },
+	/**
+	 * <en>Chinese</en>
+	 * <zh_cn>语文</zh_cn>
+	 * <zh_tw>語文</zh_tw>
+	 */
+	{
+		name: '01_chinese',
+		title: { en: 'Chinese', zh_cn: '语文', zh_tw: '語文' },
+	},
+	/**
+	 * <en>Mathematics</en>
+	 * <zh_cn>数学</zh_cn>
+	 * <zh_tw>數學</zh_tw>
+	 */
+	{
+		name: '02_math',
+		title: { en: 'Mathematics', zh_cn: '数学', zh_tw: '數學' },
+	},
+	/**
+	 * <en>English</en>
+	 * <zh_cn>英语</zh_cn>
+	 * <zh_tw>英語</zh_tw>
+	 */
+	{
+		name: '03_english',
+		title: { en: 'English', zh_cn: '英语', zh_tw: '英語' },
+	},
+	/**
+	 * <en>Programming</en>
+	 * <zh_cn>编程</zh_cn>
+	 * <zh_tw>程式設計</zh_tw>
+	 */
+	{
+		name: '04_programming',
+		title: { en: 'Programming', zh_cn: '编程', zh_tw: '程式設計' },
+	},
 ];
 
 /**
@@ -304,75 +301,75 @@ export const BRICK_SUB_KINDS = [
  * <zh_cn>html属性：激活</zh_cn>
  * <zh_tw>html内容：已啟動</zh_tw>
  */
-export const ACTIVATED_PROPERTY = "edu-activated";
+export const ACTIVATED_PROPERTY = 'edu-activated';
 
 /**
  * <en>Html attribute: subclass name</en>
  * <zh_cn>html属性：子类名</zh_cn>
  * <zh_tw>html内容：子類名</zh_tw>
  */
-export const SUB_KIND_NAME_PROPERTY = "edu-sub-kind-name";
+export const SUB_KIND_NAME_PROPERTY = 'edu-sub-kind-name';
 
 /**
  * <en>Html attributes: language</en>
  * <zh_cn>html属性：语言</zh_cn>
  * <zh_tw>html内容：語言</zh_tw>
  */
-export const LANG_PROPERTY = "edu-lang";
+export const LANG_PROPERTY = 'edu-lang';
 
 /**
  * <en>Html attribute: page order</en>
  * <zh_cn>html属性：页序</zh_cn>
  * <zh_tw>html内容：頁序</zh_tw>
  */
-export const PAGE_PROPERTY = "edu-page";
+export const PAGE_PROPERTY = 'edu-page';
 /**
  * <en>Html attribute: device</en>
  * <zh_cn>html属性：设备</zh_cn>
  * <zh_tw>html内容：設備</zh_tw>
  */
-export const DEVICE_PROPERTY = "edu-device";
+export const DEVICE_PROPERTY = 'edu-device';
 
 /**
  * <en>Html attribute: report</en>
  * <zh_cn>html属性：报表</zh_cn>
  * <zh_tw>html内容：報表</zh_tw>
  */
-export const REPORT_PROPERTY = "edu-report";
+export const REPORT_PROPERTY = 'edu-report';
 
 /**
  * <en>Html attribute: id</en>
  * <zh_cn>html属性：编号</zh_cn>
  * <zh_tw>html内容：編號</zh_tw>
  */
-export const ID_PROPERTY = "edu-id";
+export const ID_PROPERTY = 'edu-id';
 
 /**
  * <en>Html attribute: paper size</en>
  * <zh_cn>html属性：纸型</zh_cn>
  * <zh_tw>html内容：紙型</zh_tw>
  */
-export const PAPER_SIZE_PROPERTY = "edu-paper-size";
+export const PAPER_SIZE_PROPERTY = 'edu-paper-size';
 
 /**
  * <en>Html attribute: report type</en>
  * <zh_cn>html属性：报表类型</zh_cn>
  * <zh_tw>html内容：報表類型</zh_tw>
  */
-export const REPORT_KIND_PROPERTY = "edu-report-kind";
+export const REPORT_KIND_PROPERTY = 'edu-report-kind';
 
 // new Array('Monday','Tuseday','Wednesday','Thursday','Friday','Saturday','Sunday');
 export const MONTH_NAME_ARRAY = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Spt",
-  "Oct",
-  "Nov",
-  "Dec",
+	'Jan',
+	'Feb',
+	'Mar',
+	'Apr',
+	'May',
+	'Jun',
+	'Jul',
+	'Aug',
+	'Spt',
+	'Oct',
+	'Nov',
+	'Dec',
 ];

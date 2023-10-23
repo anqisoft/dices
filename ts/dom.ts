@@ -1,6 +1,6 @@
-import {RotateType, ViewBoxType, SvgHelper} from "./svgHelper.ts";
+import { RotateType, SvgHelper, ViewBoxType } from './svgHelper.ts';
 // SvgTextInfo
-import {MONTH_NAME_ARRAY} from "./const.ts";
+import { MONTH_NAME_ARRAY } from './const.ts';
 
 /**
  * <en>Internationalizable</en>
@@ -8,13 +8,14 @@ import {MONTH_NAME_ARRAY} from "./const.ts";
  * <zh_tw>可國際化</zh_tw>
  */
 export interface I18nable {
-  en: string;
-  zh_cn: string;
-  zh_tw: string;
+	en: string;
+	zh_cn: string;
+	zh_tw: string;
 }
 
 export function isI18nable(object: any): boolean {
-  return typeof object.en === 'string' && typeof object.zh_cn === 'string' && typeof object.zh_tw === 'string';
+	return typeof object.en === 'string' && typeof object.zh_cn === 'string' &&
+		typeof object.zh_tw === 'string';
 }
 
 /**
@@ -27,7 +28,7 @@ export function isI18nable(object: any): boolean {
  * <zh_tw>您想要隱藏的元素。</zh_tw>
  */
 export function hide(element: HTMLElement) {
-  if (element) element.style.display = "none";
+	if (element) element.style.display = 'none';
 }
 
 /**
@@ -40,7 +41,7 @@ export function hide(element: HTMLElement) {
  * <zh_tw>您想要顯示的元素。</zh_tw>
  */
 export function showBlock(element: HTMLElement) {
-  if (element) element.style.display = "block";
+	if (element) element.style.display = 'block';
 }
 
 /**
@@ -53,7 +54,7 @@ export function showBlock(element: HTMLElement) {
  * <zh_tw>您想要顯示的元素。</zh_tw>
  */
 export function showInlineBlock(element: HTMLElement) {
-  if (element) element.style.display = "inline-block";
+	if (element) element.style.display = 'inline-block';
 }
 
 /**
@@ -66,7 +67,7 @@ export function showInlineBlock(element: HTMLElement) {
  * <zh_tw>您想要顯示的元素。</zh_tw>
  */
 export function showFlex(element: HTMLElement) {
-  if (element) element.style.display = "flex";
+	if (element) element.style.display = 'flex';
 }
 
 /**
@@ -79,7 +80,7 @@ export function showFlex(element: HTMLElement) {
  * <zh_tw>您想要顯示的元素。</zh_tw>
  */
 export function showInlineFlex(element: HTMLElement) {
-  if (element) element.style.display = "inline-flex";
+	if (element) element.style.display = 'inline-flex';
 }
 
 /**
@@ -96,7 +97,7 @@ export function showInlineFlex(element: HTMLElement) {
  * <zh_tw>相應html元素</zh_tw>
  */
 export function getElementById(id: string): HTMLElement {
-  return document.getElementById(id) as HTMLElement;
+	return document.getElementById(id) as HTMLElement;
 }
 
 /**
@@ -117,12 +118,12 @@ export function getElementById(id: string): HTMLElement {
  * <zh_tw>html子元素</zh_tw>
  */
 export function getElementByIdAndTagName<
-  K extends keyof HTMLElementTagNameMap,
+	K extends keyof HTMLElementTagNameMap,
 >(
-  id: string,
-  _tagName: K,
+	id: string,
+	_tagName: K,
 ) {
-  return document.getElementById(id) as HTMLElementTagNameMap[K];
+	return document.getElementById(id) as HTMLElementTagNameMap[K];
 }
 
 /**
@@ -139,7 +140,7 @@ export function getElementByIdAndTagName<
  * <zh_tw>所有符合條件的元素節點清單</zh_tw>
  */
 export function querySelectorAll(selectors: string): NodeListOf<HTMLElement> {
-  return document.querySelectorAll(selectors);
+	return document.querySelectorAll(selectors);
 }
 
 /**
@@ -152,9 +153,9 @@ export function querySelectorAll(selectors: string): NodeListOf<HTMLElement> {
  * <zh_tw>可添加i18n内容的、帶i18n内容的元素節點清單</zh_tw>
  */
 export function querySelectorAllByI18n(): NodeListOf<
-  HTMLElement & { i18n: I18nable }
+	HTMLElement & { i18n: I18nable }
 > {
-  return document.querySelectorAll("[i18n]");
+	return document.querySelectorAll('[i18n]');
 }
 
 /**
@@ -167,9 +168,9 @@ export function querySelectorAllByI18n(): NodeListOf<
  * <zh_tw>可添加i18nPlaceholder内容的、帶i18n-placeholder内容的元素節點清單</zh_tw>
  */
 export function querySelectorAllByI18nPlaceholder(): NodeListOf<
-  HTMLElement & { i18nPlaceholder: I18nable }
+	HTMLElement & { i18nPlaceholder: I18nable }
 > {
-  return document.querySelectorAll("[i18n-placeholder]");
+	return document.querySelectorAll('[i18n-placeholder]');
 }
 
 /**
@@ -186,11 +187,11 @@ export function querySelectorAllByI18nPlaceholder(): NodeListOf<
  * <zh_tw>使用此標簽名的元素集合</zh_tw>
  */
 export function getElementsByTagName(
-  qualifiedName: string,
+	qualifiedName: string,
 ): HTMLCollectionOf<HTMLElement> {
-  return document.getElementsByTagName(qualifiedName) as HTMLCollectionOf<
-    HTMLElement
-  >;
+	return document.getElementsByTagName(qualifiedName) as HTMLCollectionOf<
+		HTMLElement
+	>;
 }
 
 /**
@@ -203,7 +204,7 @@ export function getElementsByTagName(
  * <zh_tw>head元素</zh_tw>
  */
 export function getHeadElement(): HTMLHeadElement {
-  return document.getElementsByTagName("head")[0] as HTMLHeadElement;
+	return document.getElementsByTagName('head')[0] as HTMLHeadElement;
 }
 
 /**
@@ -216,7 +217,7 @@ export function getHeadElement(): HTMLHeadElement {
  * <zh_tw>html元素</zh_tw>
  */
 export function getHtmlElement(): HTMLHtmlElement {
-  return document.getElementsByTagName("html")[0] as HTMLHtmlElement;
+	return document.getElementsByTagName('html')[0] as HTMLHtmlElement;
 }
 
 /**
@@ -229,7 +230,7 @@ export function getHtmlElement(): HTMLHtmlElement {
  * <zh_tw>body元素</zh_tw>
  */
 export function getBodyElement(): HTMLBodyElement {
-  return document.getElementsByTagName("body")[0] as HTMLBodyElement;
+	return document.getElementsByTagName('body')[0] as HTMLBodyElement;
 }
 
 /**
@@ -242,9 +243,9 @@ export function getBodyElement(): HTMLBodyElement {
  * <zh_tw>title元素</zh_tw>
  */
 export function getTitleElement(): HTMLTitleElement & {
-  i18n?: { en: string; zh_cn: string; zh_tw: string };
+	i18n?: { en: string; zh_cn: string; zh_tw: string };
 } {
-  return document.getElementsByTagName("title")[0] as HTMLTitleElement;
+	return document.getElementsByTagName('title')[0] as HTMLTitleElement;
 }
 
 /**
@@ -257,7 +258,7 @@ export function getTitleElement(): HTMLTitleElement & {
  * <zh_tw>header元素，因沒有HTMLHeaderElement對象，而只好用相近的HTMLDivElement。</zh_tw>
  */
 export function getHeaderElement(): HTMLDivElement {
-  return document.getElementsByTagName("header")[0] as HTMLDivElement;
+	return document.getElementsByTagName('header')[0] as HTMLDivElement;
 }
 
 /**
@@ -270,7 +271,7 @@ export function getHeaderElement(): HTMLDivElement {
  * <zh_tw>footer元素，因沒有HTMLFooterElement對象，而只好用相近的HTMLDivElement。</zh_tw>
  */
 export function getFooterElement(): HTMLDivElement {
-  return document.getElementsByTagName("footer")[0] as HTMLDivElement;
+	return document.getElementsByTagName('footer')[0] as HTMLDivElement;
 }
 
 /**
@@ -283,8 +284,8 @@ export function getFooterElement(): HTMLDivElement {
  * <zh_tw>main元素，因沒有HTMLMainElement對象，而只好用相近的HTMLDivElement。</zh_tw>
  */
 export function getMainElement(): HTMLDivElement {
-  return document.getElementsByTagName("main")[0] as HTMLDivElement;
-  // return document.getElementById("main") as HTMLDivElement;
+	return document.getElementsByTagName('main')[0] as HTMLDivElement;
+	// return document.getElementById("main") as HTMLDivElement;
 }
 
 /**
@@ -305,13 +306,13 @@ export function getMainElement(): HTMLDivElement {
  * <zh_tw>新元素</zh_tw>
  */
 export function createElement<K extends keyof HTMLElementTagNameMap>(
-  tagName: K,
-  options?: ElementCreationOptions,
+	tagName: K,
+	options?: ElementCreationOptions,
 ) {
-  return document.createElement<K>(
-    tagName,
-    options,
-  ) as HTMLElementTagNameMap[K];
+	return document.createElement<K>(
+		tagName,
+		options,
+	) as HTMLElementTagNameMap[K];
 }
 
 /**
@@ -328,10 +329,10 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
  * <zh_tw>鏈接</zh_tw>
  */
 export function setAttributesOfA(aElement: HTMLAnchorElement, link: string) {
-  aElement.setAttribute("href", link);
-  if (!link.startsWith("mailto:")) {
-    aElement.setAttribute("target", "_blank");
-  }
+	aElement.setAttribute('href', link);
+	if (!link.startsWith('mailto:')) {
+		aElement.setAttribute('target', '_blank');
+	}
 }
 
 /**
@@ -340,9 +341,9 @@ export function setAttributesOfA(aElement: HTMLAnchorElement, link: string) {
  * <zh_tw>映像：字串到onclick方法</zh_tw>
  */
 export interface OnclickFunctionMap {
-  [index: string]:
-    | ((this: GlobalEventHandlers, ev: MouseEvent) => void | boolean)
-    | null;
+	[index: string]:
+		| ((this: GlobalEventHandlers, ev: MouseEvent) => void | boolean)
+		| null;
 }
 
 /**
@@ -355,10 +356,10 @@ export interface OnclickFunctionMap {
  * <zh_tw>事件</zh_tw>
  */
 export function stopEventBubble(event: Event): boolean {
-  event.cancelBubble = true;
-  event.preventDefault();
-  event.stopPropagation();
-  return false;
+	event.cancelBubble = true;
+	event.preventDefault();
+	event.stopPropagation();
+	return false;
 }
 
 /**
@@ -371,9 +372,9 @@ export function stopEventBubble(event: Event): boolean {
  * <zh_tw>i18n數據</zh_tw>
  */
 export function getI18nInnerHTML(
-  { en, zh_cn, zh_tw }: { en: string; zh_cn: string; zh_tw: string },
+	{ en, zh_cn, zh_tw }: { en: string; zh_cn: string; zh_tw: string },
 ): string {
-  return `<en>${en}</en><zh_cn>${zh_cn}</zh_cn><zh_tw>${zh_tw}</zh_tw>`;
+	return `<en>${en}</en><zh_cn>${zh_cn}</zh_cn><zh_tw>${zh_tw}</zh_tw>`;
 }
 
 /**
@@ -386,17 +387,15 @@ export function getI18nInnerHTML(
  * <zh_tw>日期</zh_tw>
  */
 export function getI18nInnerHTMLFromDate(date: Date): string {
-  const en = `${
-    MONTH_NAME_ARRAY[date.getMonth()]
-  } ${date.getDate()}, ${date.getFullYear()}`;
-  const zh_cn = `${date.getFullYear()}-${
-    date.getMonth() +
-    1
-  }-${date.getDate()}`;
-  const zh_tw = zh_cn;
-  return `<en>${en}</en><zh_cn>${zh_cn}</zh_cn><zh_tw>${zh_tw}</zh_tw>`;
+	const en = `${MONTH_NAME_ARRAY[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+	const zh_cn = `${date.getFullYear()}-${
+		date.getMonth() +
+		1
+	}-${date.getDate()}`;
+	const zh_tw = zh_cn;
+	return `<en>${en}</en><zh_cn>${zh_cn}</zh_cn><zh_tw>${zh_tw}</zh_tw>`;
 }
 
 export interface PlaceholderI18nable {
-  [lang: string]: string;
+	[lang: string]: string;
 }

@@ -49,11 +49,14 @@ const getPageParameterByName = (name, defaultValue)=>{
 getPageParameterByName("kind", null);
 parseInt(getPageParameterByName("page", "1"), 0) - 1;
 parseInt(getPageParameterByName("id", "1"), 0);
-const SVG_NS = "http://www.w3.org/2000/svg";
+function isI18nable(object) {
+    return typeof object.en === 'string' && typeof object.zh_cn === 'string' && typeof object.zh_tw === 'string';
+}
 const LOCAL_STORAGE_KEY_OF_LANG = "lang";
-const SVG_XLINKNS = "http://www.w3.org/1999/xlink";
 CURRENT_URL.includes("?") ? CURRENT_URL.split("?")[1] : ACTUAL_PAGE_NAME;
 const getCurrentLang = ()=>localStorage.getItem(LOCAL_STORAGE_KEY_OF_LANG) || "zh_cn";
+const SVG_NS = "http://www.w3.org/2000/svg";
+const SVG_XLINKNS = "http://www.w3.org/1999/xlink";
 class SvgHelper {
     static createSvg = ()=>{
         const svg = document.createElementNS(SVG_NS, "svg");
@@ -96,6 +99,12 @@ class SvgHelper {
         svg.appendChild(circle);
     }
     static appendTspan(text, STYLE, CHAR, dx, dy) {
+        if (typeof dx === 'number') {
+            dx = `${dx}mm`;
+        }
+        if (typeof dy === 'number') {
+            dy = `${dy}mm`;
+        }
         const tspan = document.createElementNS(SVG_NS, "tspan");
         tspan.setAttribute("dx", `${dx}`);
         tspan.setAttribute("dy", `${dy}`);
@@ -103,7 +112,7 @@ class SvgHelper {
         tspan.innerHTML = CHAR;
         text.appendChild(tspan);
     }
-    static appendText(svg, STYLE, CONTENT, x, y, rotate, transformOrigin, viewBox, maybeNumber = false) {
+    static appendText(svg, STYLE, content, x, y, rotate, transformOrigin, viewBox, maybeNumber = false) {
         const g = document.createElementNS(SVG_NS, "g");
         if (rotate) {
             g.setAttribute("style", `transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`);
@@ -113,20 +122,25 @@ class SvgHelper {
         text.setAttribute("x", `${x}mm`);
         text.setAttribute("y", `${y}mm`);
         text.setAttribute("style", "dominant-baseline:middle;text-anchor:middle;");
-        if (CONTENT.indexOf("<en>") > -1) {
+        if (isI18nable(content)) {
+            content = content;
+            content = `<en>${content.en}</en><zh_cn>${content.zh_cn}</zh_cn><zh_tw>${content.zh_tw}</zh_tw>`;
+        }
+        content = content;
+        if (content.indexOf("<en>") > -1) {
             const lang = getCurrentLang();
             const startTag = `<${lang}>`;
             const endTag = `</${lang}>`;
-            if (CONTENT.indexOf(startTag) > -1) {
-                CONTENT = CONTENT.split(startTag)[1].split(endTag)[0];
+            if (content.indexOf(startTag) > -1) {
+                content = content.split(startTag)[1].split(endTag)[0];
             }
         }
-        CONTENT = CONTENT.replace(/<br \/>/gi, "<br/>").replace(/<br\/>/gi, "<br>").replace(/\\n/gi, "<br>");
-        if (CONTENT.indexOf("<br>") > -1) {
+        content = content.replace(/<br \/>/gi, "<br/>").replace(/<br\/>/gi, "<br>").replace(/\\n/gi, "<br>");
+        if (content.indexOf("<br>") > -1) {
             const fontSize = STYLE.indexOf("font-size:") > -1 ? STYLE.split("font-size:")[1].split(";")[0] : "2mm";
             const unit = fontSize.replace(/[0-9.]/gi, "");
             const dyNumber = parseFloat(fontSize.replace(unit, ""));
-            const segs = CONTENT.split("<br>");
+            const segs = content.split("<br>");
             let lastLength = 0;
             const dyOffset = `${dyNumber}${unit}`;
             segs.forEach((seg, index)=>{
@@ -135,11 +149,11 @@ class SvgHelper {
             });
         } else {
             if (maybeNumber) {
-                CONTENT.split("").forEach((__char, index)=>{
+                content.split("").forEach((__char, index)=>{
                     SvgHelper.appendTspan(text, "", __char, "0", "0");
                 });
             } else {
-                SvgHelper.appendTspan(text, "", CONTENT, "0", "0");
+                SvgHelper.appendTspan(text, "", content, "0", "0");
             }
         }
         g.appendChild(text);
@@ -188,4 +202,6 @@ class SvgHelper {
         return "";
     }
 }
+export { SVG_NS as SVG_NS };
+export { SVG_XLINKNS as SVG_XLINKNS };
 export { SvgHelper as SvgHelper };
