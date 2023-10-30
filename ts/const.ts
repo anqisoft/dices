@@ -1,3 +1,5 @@
+import DPIHelper from './DPIHelper.ts';
+
 /**
  * <en>Domain</en>
  * <zh_cn>网站域名</zh_cn>
@@ -216,9 +218,10 @@ export const getPageParameterByName = (
 	name: string,
 	defaultValue: string | null,
 ) => {
-	return CURRENT_URL.indexOf(`&${name}=`) === -1
+	const REPLACED_CURRENT_URL = CURRENT_URL.replace('?', '&');
+	return REPLACED_CURRENT_URL.indexOf(`&${name}=`) === -1
 		? defaultValue || ''
-		: CURRENT_URL.split('&').slice(1).filter((keyValue: string) =>
+		: REPLACED_CURRENT_URL.split('&').slice(1).filter((keyValue: string) =>
 			keyValue.startsWith(`${name}=`)
 		)[0].split('=')[1];
 };
@@ -373,3 +376,148 @@ export const MONTH_NAME_ARRAY = [
 	'Nov',
 	'Dec',
 ];
+
+export const DEGREE_180 = 180;
+export const DEGREE_90 = 90;
+export const DEGREE_90_COUNTERCLOCKWISE = -90;
+
+export type AnQiData = {
+	LANG: string;
+	THICKESS: number;
+
+	A3: boolean;
+	LANDSCAPE: boolean;
+
+	PAGE_PADDING_TOP: number;
+	PAGE_PADDING_LEFT: number;
+
+	PAPER_WIDTH: number;
+	PAPER_HEIGHT: number;
+
+	PAGE_WIDTH: number;
+	PAGE_HEIGHT: number;
+
+	NO: number;
+
+	MM_TO_PX_SCALE: number;
+	PX_TO_MM_SCALE: number;
+};
+
+export function parsePageParamsFromUrl(url: string) {
+	(window as unknown as { anqiData: AnQiData }).anqiData =
+		(window as unknown as { anqiData: AnQiData }).anqiData || {};
+	const anqiData: AnQiData = (window as unknown as { anqiData: AnQiData }).anqiData;
+
+	url = url.replace('?', '&').toLowerCase();
+
+	const LANG_IN_URL = url.concat('&lang=en').replace('&lang=', '厶').split('厶')[1].split('&')[0];
+	const LANG = ['en', 'zh_cn', 'zh_tw'].indexOf(LANG_IN_URL) === -1 ? 'en' : LANG_IN_URL;
+	const THICKESS = Math.max(
+		0,
+		parseFloat(
+			url.concat('&thickess=0.2').replace('&thickess=', '厶').split('厶')[1].split('&')[0],
+		),
+	);
+
+	const A3 = url.concat('&a3=true').replace('&a3=', '厶').split('厶')[1].split('&')[0] === 'true';
+	const LANDSCAPE =
+		url.concat('&landscape=false').replace('&landscape=', '厶').split('厶')[1].split('&')[0] ===
+			'true';
+
+	const PAGE_PADDING_TOP = Math.max(
+		0,
+		// parseInt(url.concat('&top=4').replace('&top=', '厶').split('厶')[1].split('&')[0]),
+		parseFloat(url.concat('&top=3.5').replace('&top=', '厶').split('厶')[1].split('&')[0]),
+	);
+	const PAGE_PADDING_LEFT = Math.max(
+		0,
+		// parseInt(url.concat('&left=3').replace('&left=', '厶').split('厶')[1].split('&')[0]),
+		parseFloat(url.concat('&left=3.5').replace('&left=', '厶').split('厶')[1].split('&')[0]),
+	);
+
+	const NO = Math.max(
+		0,
+		parseInt(url.concat('&no=1').replace('&no=', '厶').split('厶')[1].split('&')[0]),
+	);
+
+	// const  = A3 ? (LANDSCAPE ? 420 : 297) : (LANDSCAPE ? 297 : 210);
+	// const  = A3 ? (LANDSCAPE ? 297 : 420) : (LANDSCAPE ? 210 : 297);
+	const PAPER_WIDTH = parseFloat(getPageParameterByName('width', '0')) ||
+		(A3 ? (LANDSCAPE ? 420 : 297) : (LANDSCAPE ? 297 : 210));
+	const PAPER_HEIGHT = parseFloat(getPageParameterByName('height', '0')) ||
+		(A3 ? (LANDSCAPE ? 297 : 420) : (LANDSCAPE ? 210 : 297));
+
+	const PAGE_WIDTH = PAPER_WIDTH - PAGE_PADDING_LEFT * 2;
+	const PAGE_HEIGHT = PAPER_HEIGHT - PAGE_PADDING_TOP * 2;
+
+	anqiData.LANG = LANG;
+	anqiData.THICKESS = THICKESS;
+
+	anqiData.A3 = A3;
+	anqiData.LANDSCAPE = LANDSCAPE;
+
+	anqiData.PAGE_PADDING_TOP = PAGE_PADDING_TOP;
+	anqiData.PAGE_PADDING_LEFT = PAGE_PADDING_LEFT;
+
+	anqiData.PAPER_WIDTH = PAPER_WIDTH;
+	anqiData.PAPER_HEIGHT = PAPER_HEIGHT;
+
+	anqiData.PAGE_WIDTH = PAGE_WIDTH;
+	anqiData.PAGE_HEIGHT = PAGE_HEIGHT;
+
+	anqiData.NO = NO;
+
+	const DPI_HELPER = new DPIHelper();
+	anqiData.MM_TO_PX_SCALE = DPI_HELPER.getMmToPxScale();
+	anqiData.PX_TO_MM_SCALE = DPI_HELPER.getPxToMmScale();
+}
+
+export function getPageCss() {
+	const { A3, LANDSCAPE, PAGE_PADDING_TOP, PAGE_PADDING_LEFT, PAGE_WIDTH, PAGE_HEIGHT } =
+		(window as unknown as { anqiData: AnQiData }).anqiData;
+
+	return `\@media print\{\@page\{size:${A3 ? 'A3' : 'A4'} ${
+		LANDSCAPE ? 'landscape' : 'portrait'
+	};\} \}
+*\{margin:0;border:0;padding:0;\}
+page:not(:last-of-type)\{page-break-after:always;\}
+page\{padding-top:${PAGE_PADDING_TOP}mm;padding-left:${PAGE_PADDING_LEFT}mm;display:block;width:${PAGE_WIDTH}mm;height:${PAGE_HEIGHT}mm;position:relative;overflow:hidden;\}`;
+}
+
+export function setF1Content(content: string) {
+	// Change the event from 'onkeyup' to 'onkeydown', because the chrome browser doesn't work.
+	document.onkeydown = function (e) {
+		// 27 ESC
+		// alert(e.keyCode);
+		// var html = ''; for (var p in e) { html += p.concat('=>', e[p], '<br/>'); } document.getElementsByTagName('body')[0].innerHTML = html;
+		switch (e.keyCode) {
+			case 112: // F1
+				alert(content); // 'box.htm?long=80&width=60&height=50&landscape=false&a3=true&thickess=1&top=3&left=3&extend=5'
+				e.preventDefault();
+				e.stopPropagation();
+				break;
+			default:
+				break;
+		}
+
+		return false;
+	};
+}
+
+export function getNumbersArray(min: number, max: number) {
+	const array = [];
+	for (let i = min; i <= max; ++i) {
+		array.push(i.toString());
+	}
+
+	return array;
+}
+
+export function rotate90(svgElement: SVGSVGElement) {
+	const svgStyle = svgElement.style;
+
+	const { heightMm: HEIGHT } = svgElement as unknown as { heightMm: number };
+	const HALF_HEIGHT = HEIGHT * 0.5;
+	svgStyle.transform = 'rotate(90deg)';
+	svgStyle.transformOrigin = `${HALF_HEIGHT}mm ${HALF_HEIGHT}mm`;
+}

@@ -25,7 +25,7 @@ import DiceFace60 from './DiceFace60.ts';
  * <zh_cn>骰子类型</zh_cn>
  * <zh_tw>骰子類型</zh_tw>
  */
-enum DiceKind {
+export enum DiceKind {
 	/**
 	 * <en>None</en>
 	 * <zh_cn>无</zh_cn>
@@ -105,14 +105,14 @@ enum DiceKind {
  * <zh_cn>骰子类型数量</zh_cn>
  * <zh_tw>骰子類型數量</zh_tw>
  */
-const DiceKindCount = 11;
+export const DiceKindCount = 11;
 
 /**
  * <en>Default Value of Dice Type</en>
  * <zh_cn>骰子类型默认值</zh_cn>
  * <zh_tw>骰子類型默認值</zh_tw>
  */
-const DefaultDiceKind = 2047;
+export const DefaultDiceKind = 2047;
 
 /**
  * <en>Dice Generation Parameters</en>
@@ -259,17 +259,6 @@ export class DiceGenerator {
 	}: DiceParameter): DiceResult {
 		if (id.length === 0) id = 'svg_0';
 
-		let FIXED_SIDE_LENGTH = SIDE_LENGTH;
-		let nested = false;
-		switch (diceKind) {
-			case DiceKind.twentyFour:
-				FIXED_SIDE_LENGTH = 25;
-				nested = true;
-				break;
-			default:
-				break;
-		}
-
 		const svg = this.createSvg();
 		svg.setAttribute('id', id);
 
@@ -305,12 +294,13 @@ export class DiceGenerator {
 				break;
 		}
 
+		const PASTE_WIDTH = (OPTIONS as unknown as { PASTE_WIDTH: number }).PASTE_WIDTH || 0;
 		const mmToPxScale = (new DPIHelper()).getMmToPxScale();
 		switch (diceKind) {
 			case DiceKind.four:
 				new DiceFace4(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -318,12 +308,14 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			case DiceKind.six:
 				new DiceFace6(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -331,12 +323,14 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			case DiceKind.eight:
 				new DiceFace8(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -344,12 +338,29 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
+				).draw();
+				break;
+			case DiceKind.ten:
+				new DiceFace10(
+					svg,
+					SIDE_LENGTH,
+					INNER_LINE_STYLE,
+					OUTER_LINE_STYLE,
+					viewBox,
+					OPTIONS,
+					mmToPxScale,
+					infos,
+					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			case DiceKind.twelve:
 				new DiceFace12(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -357,12 +368,14 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			case DiceKind.twenty:
 				new DiceFace20(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -370,12 +383,14 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			case DiceKind.twentyFour:
 				new DiceFace24(
 					svg,
-					FIXED_SIDE_LENGTH,
+					SIDE_LENGTH,
 					INNER_LINE_STYLE,
 					OUTER_LINE_STYLE,
 					viewBox,
@@ -383,6 +398,8 @@ export class DiceGenerator {
 					mmToPxScale,
 					infos,
 					CONTENTS,
+					PASTE_WIDTH,
+					TEXT_STYLE,
 				).draw();
 				break;
 			default:
@@ -395,35 +412,10 @@ export class DiceGenerator {
 		svg.setAttribute('height', height);
 		// svg.setAttribute('style', `width:${width};height:${height};`);
 
-		// const outerSvg = nested && (FIXED_SIDE_LENGTH !== SIDE_LENGTH) ? this.createSvg(): null;
-		const outerSvg = createElement('wrap' as keyof HTMLElementTagNameMap); // as HTMLDivElement;
-		outerSvg.appendChild(svg);
-		outerSvg.setAttribute('id', id.concat('_wrapper'));
-		if (FIXED_SIDE_LENGTH !== SIDE_LENGTH) {
-			const scale = SIDE_LENGTH / FIXED_SIDE_LENGTH;
-
-			const widthOuterSvg = `${scale * viewBox.right}mm`;
-			const heightOuterSvg = `${scale * viewBox.bottom}mm`;
-
-			const transformScale = mmToPxScale * (scale - 1) / 2;
-			outerSvg.setAttribute(
-				'style',
-				`width:${widthOuterSvg};height:${heightOuterSvg};display:inline-block;`,
-			);
-			svg.setAttribute(
-				'transform',
-				`translate(${viewBox.right * transformScale}, ${
-					viewBox.bottom *
-					transformScale
-				}) scale(${scale}, ${scale})`,
-			);
-			svg.setAttribute('transform-origin', 'center');
-		}
-
 		const css = 'page,wrap{page-break-inside:avoid;}wrap{display:inline-flex;}';
 		const result = {
 			id,
-			svg: (nested ? outerSvg : svg),
+			svg,
 			css,
 		};
 		return result;
@@ -437,3 +429,5 @@ export class DiceGenerator {
 		return svg;
 	};
 }
+
+// export const diceGenerator = new DiceGenerator();

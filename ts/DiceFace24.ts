@@ -1,13 +1,21 @@
 import DiceBase from './DiceBase.ts';
 
-export default class DiceFaceSubClass extends DiceBase {
+export default class DiceFace24 extends DiceBase {
 	protected drawGraphs() {
+		if (this.TEXT_STYLE.length === 0) {
+			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
+				this.SIDE_LENGTH * 0.8
+			}mm;`;
+		}
+
 		const ANGLE = 48.275;
+		const { SIDE_LENGTH } = this;
 		const { getSinByAngle, getCosByAngle } = this;
+		const SIDE_SCALE = SIDE_LENGTH / 25;
 		const TEXT_OFFSET_SCALE = 0.2;
 		const BIGER_ANGLE = 180 - ANGLE * 2;
 		const SMALL_ANGLE_COS = Math.cos(ANGLE * Math.PI / 180);
-		const HALF_LONG_SIDE_LENGTH = 50 * 0.5;
+		const HALF_LONG_SIDE_LENGTH = SIDE_LENGTH;
 		const SHORT_SIDE_LENGTH = HALF_LONG_SIDE_LENGTH / SMALL_ANGLE_COS;
 
 		let ax = 0,
@@ -37,13 +45,13 @@ export default class DiceFaceSubClass extends DiceBase {
 
 		let content_offset_top = -3, content_offset_left = -2;
 		content_offset_top *= 1.5, content_offset_left *= 1.5;
-		const OFFSET_X = -23.0805019730301175;
+		const OFFSET_X = -23.0805019730301175 * SIDE_SCALE;
 		// 080501973030115 1.7763568394002505e-14mm
 		// 08050197303012 -1.0658141036401503e-14mm
-		const X_VALUE = 150;
-		// const ax1 = 150, ay1 = 0;
+		const X_VALUE = SIDE_LENGTH * 6;
+		// const ax1 = SIDE_LENGTH * 6, ay1 = 0;
 		const ax1 = X_VALUE + OFFSET_X, ay1 = 0;
-		const bx1 = ax1 + 50, by1 = 0;
+		const bx1 = ax1 + SIDE_LENGTH * 2, by1 = 0;
 		const cx1 = ax1 + HALF_LONG_SIDE_LENGTH,
 			cy1 = SHORT_SIDE_LENGTH * getSinByAngle(ANGLE);
 		const angle_cd1 = BIGER_ANGLE - ANGLE;
@@ -55,10 +63,13 @@ export default class DiceFaceSubClass extends DiceBase {
 		const angle_cf1 = BIGER_ANGLE - angle_ce1;
 		const fx1 = cx1 + SHORT_SIDE_LENGTH * getCosByAngle(angle_cf1),
 			fy1 = cy1 - SHORT_SIDE_LENGTH * getSinByAngle(angle_cf1);
-		const c_mirror_ad_x1 = X_VALUE + dx1 - cx1;
-		const c_mirror_ad_y1 = 0 + dy1 - cy1;
-		const aax1 = X_VALUE + (c_mirror_ad_x1 - X_VALUE) * 0.3 + OFFSET_X,
-			aay1 = 0 + (c_mirror_ad_y1 - 0) * 0.3;
+		// const c_mirror_ad_x1 = X_VALUE + dx1 - cx1;
+		// const c_mirror_ad_y1 = 0 + dy1 - cy1;
+		const c_mirror_ad_x1 = ax1 + dx1 - cx1;
+		const c_mirror_ad_y1 = ay1 + dy1 - cy1;
+		// const aax1 = X_VALUE + (c_mirror_ad_x1 - X_VALUE) * 0.3 + OFFSET_X,
+		// 	aay1 = 0 + (c_mirror_ad_y1 - 0) * 0.3;
+		const aax1 = ax1 + (c_mirror_ad_x1 - ax1) * 0.3, aay1 = ay1 + (c_mirror_ad_y1 - ay1) * 0.3;
 		const bbx1 = 0, bby1 = 0;
 		const ddx1 = dx1 + (c_mirror_ad_x1 - dx1) * 0.3,
 			ddy1 = dy1 + (c_mirror_ad_y1 - dy1) * 0.3;
@@ -995,180 +1006,46 @@ export default class DiceFaceSubClass extends DiceBase {
 	}
 
 	protected setTextsInfo() {
-		// this.setSvgTextInfo(infos[0], SIDE_LENGTH * 36.5 / 25, SIDE_LENGTH * 100.0 / 25, 180);
-		// this.setSvgTextInfo(infos[1], SIDE_LENGTH * 147.5 / 25, SIDE_LENGTH * 125.0 / 25, 180);
-		// this.setSvgTextInfo(infos[2], SIDE_LENGTH * 84.0 / 25, SIDE_LENGTH * 132.0 / 25, -70.35);
-		// this.setSvgTextInfo(infos[3], SIDE_LENGTH * 194.0 / 25, SIDE_LENGTH * 132.0 / 25, -70.35);
-		// this.setSvgTextInfo(infos[4], SIDE_LENGTH * 132.5 / 25, SIDE_LENGTH * 140.0 / 25, -83.45);
-		// this.setSvgTextInfo(infos[5], SIDE_LENGTH * 95.0 / 25, SIDE_LENGTH * 175.0 / 25, 83.45);
-		// this.setSvgTextInfo(infos[6], SIDE_LENGTH * 195.0 / 25, SIDE_LENGTH * 147.5 / 25, 166.9);
-		// this.setSvgTextInfo(infos[7], SIDE_LENGTH * 95.0 / 25, SIDE_LENGTH * 115.0 / 25, 193.1);
-		// this.setSvgTextInfo(infos[8], SIDE_LENGTH * 162.0 / 25, SIDE_LENGTH * 40.0 / 25, 13.1);
-		// this.setSvgTextInfo(infos[9], SIDE_LENGTH * 97.5 / 25, SIDE_LENGTH * 66.0 / 25, 206.2);
-		// this.setSvgTextInfo(infos[10], SIDE_LENGTH * 140.0 / 25, SIDE_LENGTH * 82.0 / 25, -70.35);
-		// this.setSvgTextInfo(infos[11], SIDE_LENGTH * 122.5 / 25, SIDE_LENGTH * 15.0 / 25, 96.55);
-		// this.setSvgTextInfo(infos[12], SIDE_LENGTH * 111.0 / 25, SIDE_LENGTH * 127.5 / 25, 96.55);
-		// this.setSvgTextInfo(infos[13], SIDE_LENGTH * 110.0 / 25, SIDE_LENGTH * 195.0 / 25, 263.45);
-		// this.setSvgTextInfo(infos[14], SIDE_LENGTH * 80.0 / 25, SIDE_LENGTH * 160.0 / 25, 180);
-		// this.setSvgTextInfo(infos[15], SIDE_LENGTH * 147.5 / 25, SIDE_LENGTH * 150.0 / 25, 13.1);
-		// this.setSvgTextInfo(infos[16], SIDE_LENGTH * 53.0 / 25, SIDE_LENGTH * 80.0 / 25, 0);
-		// this.setSvgTextInfo(infos[17], SIDE_LENGTH * 157.5 / 25, SIDE_LENGTH * 91.0 / 25, 26.2);
-		// this.setSvgTextInfo(infos[18], SIDE_LENGTH * 115.0 / 25, SIDE_LENGTH * 71.0 / 25, 109.65);
-		// this.setSvgTextInfo(infos[19], SIDE_LENGTH * 145.0 / 25, SIDE_LENGTH * 30.0 / 25, -83.45);
-		// this.setSvgTextInfo(infos[20], SIDE_LENGTH * 167.5 / 25, SIDE_LENGTH * 71.0 / 25, 122.75);
-		// this.setSvgTextInfo(infos[21], SIDE_LENGTH * 69.0 / 25, SIDE_LENGTH * 65.0 / 25, 96.55);
-		// this.setSvgTextInfo(infos[22], SIDE_LENGTH * 218.0 / 25, SIDE_LENGTH * 92.0 / 25, 13.1);
-		// this.setSvgTextInfo(infos[23], SIDE_LENGTH * 105.0 / 25, SIDE_LENGTH * 92.0 / 25, 13.1);
+		const { infos, SIDE_LENGTH, setSvgTextInfo } = this;
+		const SIZE_SCALE = SIDE_LENGTH / 25;
+		[
+			// 1-4
+			{ x: 195, y: 70.0, angle: 180 },
+			{ x: 85, y: 44, angle: 180 },
+			{ x: 132.0, y: 138.0, angle: -70.35 },
+			{ x: 171.0, y: 36.0, angle: -70.35 },
 
-		// 2022-11-18
-		this.setSvgTextInfo(
-			this.infos[0],
-			this.SIDE_LENGTH * 36.5 / 25,
-			this.SIDE_LENGTH * 100.0 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[1],
-			this.SIDE_LENGTH * 147.5 / 25,
-			this.SIDE_LENGTH * 125.0 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[2],
-			this.SIDE_LENGTH * 70.0 / 25,
-			this.SIDE_LENGTH * 120.0 / 25,
-			-70.35,
-		);
-		this.setSvgTextInfo(
-			this.infos[3],
-			this.SIDE_LENGTH * 180.0 / 25,
-			this.SIDE_LENGTH * 120.0 / 25,
-			-70.35,
-		);
+			// 5-8
+			{ x: 158.0, y: 84.0, angle: -83.45 },
+			{ x: 12, y: 61.0, angle: 83.45 },
+			{ x: 26.0, y: 38, angle: 166.9 },
+			{ x: 143.0, y: 63.0, angle: 193.1 },
 
-		this.setSvgTextInfo(
-			this.infos[4],
-			this.SIDE_LENGTH * 120.0 / 25,
-			this.SIDE_LENGTH * 128.0 / 25,
-			-83.45,
-		);
-		this.setSvgTextInfo(
-			this.infos[5],
-			this.SIDE_LENGTH * 82.5 / 25,
-			this.SIDE_LENGTH * 188.0 / 25,
-			83.45,
-		);
-		this.setSvgTextInfo(
-			this.infos[6],
-			this.SIDE_LENGTH * 195.0 / 25,
-			this.SIDE_LENGTH * 147.5 / 25,
-			166.9,
-		);
-		this.setSvgTextInfo(
-			this.infos[7],
-			this.SIDE_LENGTH * 95.0 / 25,
-			this.SIDE_LENGTH * 110.0 / 25,
-			193.1,
-		);
+			// 9-12
+			{ x: 148.0, y: 45.0, angle: 13.1 },
+			{ x: 125.0, y: 115.0, angle: 206.2 },
+			{ x: 105.0, y: 70.0, angle: -70.35 },
+			{ x: 175.0, y: 85.0, angle: 96.55 },
 
-		this.setSvgTextInfo(
-			this.infos[8],
-			this.SIDE_LENGTH * 139.0 / 25,
-			this.SIDE_LENGTH * 44.0 / 25,
-			13.1,
-		);
-		this.setSvgTextInfo(
-			this.infos[9],
-			this.SIDE_LENGTH * 97.5 / 25,
-			this.SIDE_LENGTH * 58.0 / 25,
-			206.2,
-		);
-		this.setSvgTextInfo(
-			this.infos[10],
-			this.SIDE_LENGTH * 125.0 / 25,
-			this.SIDE_LENGTH * 70.0 / 25,
-			-70.35,
-		);
-		this.setSvgTextInfo(
-			this.infos[11],
-			this.SIDE_LENGTH * 114.0 / 25,
-			this.SIDE_LENGTH * 27.0 / 25,
-			96.55,
-		);
+			// 13-16
+			{ x: 66.0, y: 63.0, angle: 96.55 },
+			{ x: 215.5, y: 88.0, angle: 263.45 },
+			{ x: 153.0, y: 7.5, angle: 180 },
+			{ x: 108, y: 152, angle: 13.1 },
 
-		this.setSvgTextInfo(
-			this.infos[12],
-			this.SIDE_LENGTH * 102.0 / 25,
-			this.SIDE_LENGTH * 138.0 / 25,
-			96.55,
-		);
-		this.setSvgTextInfo(
-			this.infos[13],
-			this.SIDE_LENGTH * 102.0 / 25,
-			this.SIDE_LENGTH * 183.0 / 25,
-			263.45,
-		);
-		this.setSvgTextInfo(
-			this.infos[14],
-			this.SIDE_LENGTH * 80.0 / 25,
-			this.SIDE_LENGTH * 160.0 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[15],
-			this.SIDE_LENGTH * 126.0 / 25,
-			this.SIDE_LENGTH * 154.0 / 25,
-			13.1,
-		);
+			// 17-20
+			{ x: 30.0, y: 78.0, angle: 0 },
+			{ x: 130.0, y: 100.0, angle: 26.2 },
+			{ x: 122.0, y: 75.0, angle: 109.65 },
+			{ x: 52.0, y: 59.0, angle: -83.45 },
 
-		this.setSvgTextInfo(
-			this.infos[16],
-			this.SIDE_LENGTH * 30.0 / 25,
-			this.SIDE_LENGTH * 78.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[17],
-			this.SIDE_LENGTH * 137.0 / 25,
-			this.SIDE_LENGTH * 95.0 / 25,
-			26.2,
-		);
-		this.setSvgTextInfo(
-			this.infos[18],
-			this.SIDE_LENGTH * 110.0 / 25,
-			this.SIDE_LENGTH * 84.0 / 25,
-			109.65,
-		);
-		this.setSvgTextInfo(
-			this.infos[19],
-			this.SIDE_LENGTH * 130.0 / 25,
-			this.SIDE_LENGTH * 16.0 / 25,
-			-83.45,
-		);
-
-		this.setSvgTextInfo(
-			this.infos[20],
-			this.SIDE_LENGTH * 160.0 / 25,
-			this.SIDE_LENGTH * 80.0 / 25,
-			122.75,
-		);
-		this.setSvgTextInfo(
-			this.infos[21],
-			this.SIDE_LENGTH * 60.0 / 25,
-			this.SIDE_LENGTH * 77.0 / 25,
-			96.55,
-		);
-		this.setSvgTextInfo(
-			this.infos[22],
-			this.SIDE_LENGTH * 195.0 / 25,
-			this.SIDE_LENGTH * 93.0 / 25,
-			13.1,
-		);
-		this.setSvgTextInfo(
-			this.infos[23],
-			this.SIDE_LENGTH * 83.0 / 25,
-			this.SIDE_LENGTH * 93.0 / 25,
-			13.1,
-		);
+			// 21-24
+			{ x: 97.5, y: 121.0, angle: 122.75 },
+			{ x: 131.0, y: 28.0, angle: 96.55 },
+			{ x: 191.0, y: 110.0, angle: 13.1 },
+			{ x: 81.5, y: 83.5, angle: 13.1 },
+		].forEach(({ x, y, angle }, n) => {
+			setSvgTextInfo(infos[n], SIZE_SCALE * x, SIZE_SCALE * y, angle);
+		});
 	}
 }

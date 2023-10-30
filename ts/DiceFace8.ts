@@ -2,6 +2,12 @@ import DiceBase from './DiceBase.ts';
 
 export default class DiceFace8 extends DiceBase {
 	protected drawGraphs() {
+		if (this.TEXT_STYLE.length === 0) {
+			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
+				this.SIDE_LENGTH * 0.45
+			}mm;`;
+		}
+
 		const HEIGHT_OF_ONE = this.SIDE_LENGTH * 1.732 * 0.5;
 		const HEIGHT_OF_TWO = HEIGHT_OF_ONE * 2;
 		const BOTTOM = HEIGHT_OF_ONE * 3;
@@ -84,7 +90,9 @@ export default class DiceFace8 extends DiceBase {
 			null,
 		);
 
-		const EXTNED_SCALE = 0.15;
+		// const EXTNED_SCALE = 0.15;
+		const { SIDE_LENGTH } = this;
+		const EXTNED_SCALE = SIDE_LENGTH < 3 ? 1 : (SIDE_LENGTH <= 10 ? 0.5 : 0.15);
 		const EXTNED_LENGTH = EXTNED_SCALE * this.SIDE_LENGTH;
 		const OFFSET_X = EXTNED_LENGTH * 0.5;
 		const OFFSET_Y = EXTNED_LENGTH * Math.cos(30 / 180 * Math.PI);
@@ -152,69 +160,44 @@ export default class DiceFace8 extends DiceBase {
 		x1 = x2, x2 -= OFFSET_X + this.SIDE_LENGTH * 0.5, y1 = y2, y2 -= OFFSET_Y + HEIGHT_OF_ONE;
 		this.appendLine(this.svg, this.OUTER_LINE_STYLE, x1, x2, y1, y2, null);
 
-		this.viewBox.right = this.SIDE_LENGTH * 3.5 + EXTNED_LENGTH;
+		this.viewBox.right = this.SIDE_LENGTH * 3.5 + EXTNED_LENGTH * Math.sin(45 / 180 * Math.PI);
 		this.viewBox.bottom = BOTTOM;
 	}
 
 	protected setTextsInfo() {
-		// 8 text elements.
-		// this.setSvgTextInfo(infos[0], SIDE_LENGTH * 37.5 / 25, SIDE_LENGTH * 15.0 / 25, 0);
-		// this.setSvgTextInfo(infos[1], SIDE_LENGTH * 78.0 / 25, SIDE_LENGTH * 38.0 / 25, 180);
-		// this.setSvgTextInfo(infos[2], SIDE_LENGTH * 25.5 / 25, SIDE_LENGTH * 38.0 / 25, 0);
-		// this.setSvgTextInfo(infos[3], SIDE_LENGTH * 53.0 / 25, SIDE_LENGTH * 38.0 / 25, 180);
-		// this.setSvgTextInfo(infos[4], SIDE_LENGTH * 50.0 / 25, SIDE_LENGTH * 38.0 / 25, 0);
-		// this.setSvgTextInfo(infos[5], SIDE_LENGTH * 28.5 / 25, SIDE_LENGTH * 38.0 / 25, 180);
-		// this.setSvgTextInfo(infos[6], SIDE_LENGTH * 75.0 / 25, SIDE_LENGTH * 39.0 / 25, 0);
-		// this.setSvgTextInfo(infos[7], SIDE_LENGTH * 41.5 / 25, SIDE_LENGTH * 17.5 / 25, 180);
+		// 8 text elements: 1, 2, 3, 4, 5, 6, 7, 8
+		// console.log(this.infos);
 
-		this.setSvgTextInfo(
-			this.infos[0],
-			this.SIDE_LENGTH * 37.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[5],
-			this.SIDE_LENGTH * 78.0 / 25,
-			this.SIDE_LENGTH * 38.0 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[3],
-			this.SIDE_LENGTH * 25.5 / 25,
-			this.SIDE_LENGTH * 38.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[6],
-			this.SIDE_LENGTH * 53.0 / 25,
-			this.SIDE_LENGTH * 38.0 / 25,
-			180,
-		);
+		const { infos, SIDE_LENGTH, setSvgTextInfo } = this;
 
-		this.setSvgTextInfo(
-			this.infos[2],
-			this.SIDE_LENGTH * 50.0 / 25,
-			this.SIDE_LENGTH * 38.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[4],
-			this.SIDE_LENGTH * 28.5 / 25,
-			this.SIDE_LENGTH * 38.0 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[1],
-			this.SIDE_LENGTH * 75.0 / 25,
-			this.SIDE_LENGTH * 39.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[7],
-			this.SIDE_LENGTH * 41.5 / 25,
-			this.SIDE_LENGTH * 17.5 / 25,
-			180,
-		);
+		const HALF_SIDE_LENGTH = SIDE_LENGTH * 0.5;
+		const X1 = HALF_SIDE_LENGTH;
+		const X2 = X1 + HALF_SIDE_LENGTH;
+		const X3 = X2 + HALF_SIDE_LENGTH;
+		const X4 = X3 + HALF_SIDE_LENGTH;
+		const X5 = X4 + HALF_SIDE_LENGTH;
+		const X6 = X5 + HALF_SIDE_LENGTH;
+
+		const SIN60 = Math.sin(Math.PI * 60 / 180);
+		const Y1 = SIDE_LENGTH * SIN60 * 0.70;
+		const Y2 = SIDE_LENGTH * SIN60 * 1.30;
+		const Y3 = SIDE_LENGTH * SIN60 * 1.70;
+		const Y4 = SIDE_LENGTH * SIN60 * 2.30;
+
+		[
+			{ x: X3, y: Y1, rotate: 0 },
+
+			{ x: X6, y: Y3, rotate: 0 },
+			{ x: X4, y: Y3, rotate: 0 },
+			{ x: X2, y: Y3, rotate: 0 },
+
+			{ x: X5, y: Y2, rotate: 180 },
+			{ x: X1, y: Y2, rotate: 180 },
+			{ x: X3, y: Y2, rotate: 180 },
+
+			{ x: X4, y: Y4, rotate: 180 },
+		].map(({ x, y, rotate }, n) => {
+			setSvgTextInfo(infos[n], x, y, rotate);
+		});
 	}
 }

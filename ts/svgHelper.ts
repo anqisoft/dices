@@ -148,18 +148,18 @@ export class SvgHelper {
 		// deno-lint-ignore no-inferrable-types
 		maybeNumber: boolean = false,
 	) {
-		const g = document.createElementNS(SVG_NS, 'g') as SVGGElement;
+		// const g = document.createElementNS(SVG_NS, 'g') as SVGGElement;
 		// g.setAttribute('x', `${x}mm`);
 		// g.setAttribute('y', `${y}mm`);
 		// g.setAttribute('style', 'display:flex;justify-content:center;align-items:center;overflow:hidden;');
-		if (rotate) {
-			g.setAttribute(
-				'style',
-				`transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`,
-			);
-		}
+		// if (rotate) {
+		// 	g.setAttribute(
+		// 		'style',
+		// 		`transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`,
+		// 	);
+		// }
 
-		svg.appendChild(g);
+		// svg.appendChild(g);
 
 		const text = document.createElementNS(
 			SVG_NS,
@@ -167,10 +167,12 @@ export class SvgHelper {
 		) as SVGTextElement;
 		text.setAttribute('x', `${x}mm`);
 		text.setAttribute('y', `${y}mm`);
-		text.setAttribute(
-			'style',
-			'dominant-baseline:middle;text-anchor:middle;',
-		);
+		// text.setAttribute(
+		// 	'style',
+		// 	// 'dominant-baseline:middle;text-anchor:middle;',
+		// 	'dominant-baseline:middle;text-anchor:middle;'.concat(rotate ? `transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`: ''),
+		// );
+		svg.appendChild(text);
 		// text.setAttribute('dx', '0');
 		// text.setAttribute('dy', '0');
 		// text.setAttribute('rotate', rotate.toString());
@@ -268,7 +270,7 @@ export class SvgHelper {
 			}
 		}
 
-		g.appendChild(text);
+		// g.appendChild(text);
 
 		if (viewBox) {
 			// left/top/right/bottom/width/height
@@ -281,6 +283,12 @@ export class SvgHelper {
 			viewBox.bottom = Math.max(viewBox.bottom, y1, y2);
 		}
 
+		// STYLE = STYLE.concat('dominant-baseline:middle;text-anchor:middle;'.concat(rotate ? `transform: rotate(${rotate}deg);transform-origin:${transformOrigin};`: ''));
+		STYLE = STYLE.concat(
+			'dominant-baseline:middle;text-anchor:middle;'.concat(
+				rotate ? `transform: rotate(${rotate}deg);transform-origin:${x}mm ${y}mm;` : '',
+			),
+		);
 		text.setAttribute('style', STYLE);
 	}
 

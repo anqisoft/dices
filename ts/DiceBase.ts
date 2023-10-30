@@ -47,6 +47,11 @@ export default abstract class DiceBase {
 		PASTE_WIDTH: number = 0,
 		TEXT_STYLE: string = '',
 	) {
+		if (OUTER_LINE_STYLE.length === 0) OUTER_LINE_STYLE = 'stroke:#555;stroke-width:0.2mm;';
+		if (INNER_LINE_STYLE.length === 0) {
+			INNER_LINE_STYLE = 'stroke:#888;stroke-width:0.1mm;stroke-dasharray:3 2;';
+		}
+
 		this.svg = svg;
 		this.SIDE_LENGTH = SIDE_LENGTH;
 		this.INNER_LINE_STYLE = INNER_LINE_STYLE;
@@ -75,9 +80,10 @@ export default abstract class DiceBase {
 				x,
 				y,
 				rotate,
-				'center',
+				'',
 				null,
-				false,
+				// false,
+				true,
 			);
 		});
 	}
@@ -98,10 +104,12 @@ export default abstract class DiceBase {
 	protected abstract drawGraphs(): void;
 	protected abstract setTextsInfo(): void;
 
-	protected drawInnerLine(x1: number, x2: number, y1: number, y2: number) {
-		SvgHelper.appendLine(this.svg, this.INNER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
-	}
-	protected drawOuterLine(x1: number, x2: number, y1: number, y2: number) {
-		SvgHelper.appendLine(this.svg, this.OUTER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
-	}
+	// protected drawInnerLine(x1: number, x2: number, y1: number, y2: number) {
+	// 	console.log('DiceFace10 call drawInnerLine()', this.svg);
+	// 	SvgHelper.appendLine(this.svg, this.INNER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
+	// }
+	// protected drawOuterLine(x1: number, x2: number, y1: number, y2: number) {
+	// 	console.log('DiceFace10 call drawOuterLine()', this.svg);
+	// 	SvgHelper.appendLine(this.svg, this.OUTER_LINE_STYLE, x1, x2, y1, y2, this.viewBox);
+	// }
 }

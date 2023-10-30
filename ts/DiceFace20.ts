@@ -1,8 +1,18 @@
 import DiceBase from './DiceBase.ts';
+import { SVG_NS } from './svgHelper.ts';
 
 export default class DiceFace20 extends DiceBase {
 	protected drawGraphs() {
-		const pasteRegionScale = 0.2;
+		if (this.TEXT_STYLE.length === 0) {
+			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
+				this.SIDE_LENGTH * 0.45
+			}mm;`;
+		}
+
+		// const pasteRegionScale = 0.2;
+		const { SIDE_LENGTH } = this;
+		const pasteRegionScale = SIDE_LENGTH < 3 ? 1 : (SIDE_LENGTH <= 10 ? 0.5 : 0.25);
+
 		const pasteRegion = this.SIDE_LENGTH * pasteRegionScale;
 		const pasteRegionPx = pasteRegion * this.mmToPxScale;
 
@@ -23,8 +33,11 @@ export default class DiceFace20 extends DiceBase {
 		const TwoY = OneY * 2;
 		const ThreeY = OneY * 3;
 
+		(this as unknown as { pasteRegionShortBiasX: number }).pasteRegionShortBiasX =
+			pasteRegionShortBiasX;
+
 		let x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-		let FIVE_SIDE = this.SIDE_LENGTH * 5;
+		const FIVE_SIDE = this.SIDE_LENGTH * 5;
 		x1 = pasteRegionLongBiasX + pasteRegion, x2 = x1 + FIVE_SIDE;
 		y1 = OneY, y2 = y1;
 		this.appendLine(
@@ -135,57 +148,57 @@ export default class DiceFace20 extends DiceBase {
 		const pasteRegionLongBiasXPx = pasteRegionLongBiasX * this.mmToPxScale;
 		const pasteRegionLongBiasYPx = pasteRegionLongBiasY * this.mmToPxScale;
 
-		const path = document.createElementNS(this.SVG_NS, 'path') as unknown as SVGPathElement;
+		const path = document.createElementNS(SVG_NS, 'path') as unknown as SVGPathElement;
 		path.setAttribute('fill', 'none');
 		path.setAttribute('stroke', '#000000');
 		path.setAttribute(
 			'd',
 			`M 0, ${OneYPx + pasteRegionLongBiasYPx} `
 				.concat(
-					`l ${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${OneXPx}, -${OneYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
-					`l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
-					`l ${OneXPx}, -${OneYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
-					`l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
-					`l ${OneXPx}, -${OneYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
-					`l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
-					`l ${OneXPx}, -${OneYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
-					`l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
-					`l ${OneXPx}, -${OneYPx}`,
-					`h ${pasteRegionPx}`,
-					`l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
-					`l -${
+					` l ${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${OneXPx}, -${OneYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
+					` l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
+					` l ${OneXPx}, -${OneYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
+					` l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
+					` l ${OneXPx}, -${OneYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
+					` l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
+					` l ${OneXPx}, -${OneYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
+					` l -${pasteRegionShortBiasXPx}, ${pasteRegionShortBiasYPx}`,
+					` l ${OneXPx}, -${OneYPx}`,
+					` h ${pasteRegionPx}`,
+					` l ${pasteRegionLongBiasXPx}, ${pasteRegionLongBiasYPx}`,
+					` l -${
 						pasteRegionShortBiasXPx +
 						OneXPx * 2
 					}, ${pasteRegionShortBiasYPx + OneYPx * 2}`,
-					`h -${pasteRegionPx}`,
-					`l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
-					`l -${OneXPx}, ${OneYPx}`,
-					`h -${pasteRegionPx}`,
-					`l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
-					`l -${OneXPx}, ${OneYPx}`,
-					`h -${pasteRegionPx}`,
-					`l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
-					`l -${OneXPx}, ${OneYPx}`,
-					`h -${pasteRegionPx}`,
-					`l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
-					`l -${OneXPx}, ${OneYPx}`,
-					`h -${pasteRegionPx}`,
-					`l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
-					`l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
+					` h -${pasteRegionPx}`,
+					` l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
+					` l -${OneXPx}, ${OneYPx}`,
+					` h -${pasteRegionPx}`,
+					` l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
+					` l -${OneXPx}, ${OneYPx}`,
+					` h -${pasteRegionPx}`,
+					` l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
+					` l -${OneXPx}, ${OneYPx}`,
+					` h -${pasteRegionPx}`,
+					` l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
+					` l -${OneXPx}, ${OneYPx}`,
+					` h -${pasteRegionPx}`,
+					` l -${pasteRegionLongBiasXPx}, -${pasteRegionLongBiasYPx}`,
+					` l ${pasteRegionShortBiasXPx}, -${pasteRegionShortBiasYPx}`,
 					' z',
 				),
 		);
@@ -196,129 +209,63 @@ export default class DiceFace20 extends DiceBase {
 	}
 
 	protected setTextsInfo() {
-		// 20 text elements.
-		this.setSvgTextInfo(
-			this.infos[0],
-			this.SIDE_LENGTH * 27.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[1],
-			this.SIDE_LENGTH * 52.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[2],
-			this.SIDE_LENGTH * 77.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[3],
-			this.SIDE_LENGTH * 102.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[4],
-			this.SIDE_LENGTH * 127.5 / 25,
-			this.SIDE_LENGTH * 15.0 / 25,
-			0,
-		);
+		// 20 text elements: 1, 2, 3, 4, 5, 6, 7, 8, 9, ..., 20
+		// console.log(this.infos);
 
-		this.setSvgTextInfo(
-			this.infos[5],
-			this.SIDE_LENGTH * 15.0 / 25,
-			this.SIDE_LENGTH * 36.65 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[6],
-			this.SIDE_LENGTH * 40.0 / 25,
-			this.SIDE_LENGTH * 36.65 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[7],
-			this.SIDE_LENGTH * 65.0 / 25,
-			this.SIDE_LENGTH * 36.65 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[8],
-			this.SIDE_LENGTH * 90.0 / 25,
-			this.SIDE_LENGTH * 36.65 / 25,
-			0,
-		);
-		this.setSvgTextInfo(
-			this.infos[9],
-			this.SIDE_LENGTH * 115.0 / 25,
-			this.SIDE_LENGTH * 36.65 / 25,
-			0,
-		);
+		const { infos, SIDE_LENGTH, setSvgTextInfo } = this;
+		const pasteRegionShortBiasX =
+			(this as unknown as { pasteRegionShortBiasX: number }).pasteRegionShortBiasX;
 
-		this.setSvgTextInfo(
-			this.infos[10],
-			this.SIDE_LENGTH * 115.0 / 25,
-			this.SIDE_LENGTH * 38.75 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[11],
-			this.SIDE_LENGTH * 90.0 / 25,
-			this.SIDE_LENGTH * 38.75 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[12],
-			this.SIDE_LENGTH * 65.0 / 25,
-			this.SIDE_LENGTH * 38.75 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[13],
-			this.SIDE_LENGTH * 40.0 / 25,
-			this.SIDE_LENGTH * 38.75 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[14],
-			this.SIDE_LENGTH * 15.0 / 25,
-			this.SIDE_LENGTH * 38.75 / 25,
-			180,
-		);
+		const HALF_SIDE_LENGTH = SIDE_LENGTH * 0.5;
+		const X1 = pasteRegionShortBiasX + HALF_SIDE_LENGTH;
+		const X2 = X1 + HALF_SIDE_LENGTH;
+		const X3 = X2 + HALF_SIDE_LENGTH;
+		const X4 = X3 + HALF_SIDE_LENGTH;
+		const X5 = X4 + HALF_SIDE_LENGTH;
+		const X6 = X5 + HALF_SIDE_LENGTH;
+		const X7 = X6 + HALF_SIDE_LENGTH;
+		const X8 = X7 + HALF_SIDE_LENGTH;
+		const X9 = X8 + HALF_SIDE_LENGTH;
+		const X10 = X9 + HALF_SIDE_LENGTH;
 
-		this.setSvgTextInfo(
-			this.infos[15],
-			this.SIDE_LENGTH * 127.5 / 25,
-			this.SIDE_LENGTH * 16.25 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[16],
-			this.SIDE_LENGTH * 102.5 / 25,
-			this.SIDE_LENGTH * 16.25 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[17],
-			this.SIDE_LENGTH * 77.5 / 25,
-			this.SIDE_LENGTH * 16.25 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[18],
-			this.SIDE_LENGTH * 52.5 / 25,
-			this.SIDE_LENGTH * 16.25 / 25,
-			180,
-		);
-		this.setSvgTextInfo(
-			this.infos[19],
-			this.SIDE_LENGTH * 27.5 / 25,
-			this.SIDE_LENGTH * 16.25 / 25,
-			180,
-		);
+		const SIN60 = Math.sin(Math.PI * 60 / 180);
+		const Y1 = SIDE_LENGTH * SIN60 * 0.70;
+		const Y2 = SIDE_LENGTH * SIN60 * 1.30;
+		const Y3 = SIDE_LENGTH * SIN60 * 1.70;
+		const Y4 = SIDE_LENGTH * SIN60 * 2.30;
+
+		[
+			// 1-4
+			{ x: X2, y: Y1, rotate: 0 },
+			{ x: X10, y: Y2, rotate: 180 },
+			{ x: X6, y: Y2, rotate: 180 },
+			{ x: X5, y: Y4, rotate: 180 },
+
+			// 5-8
+			{ x: X4, y: Y1, rotate: 0 },
+			{ x: X8, y: Y2, rotate: 180 },
+			{ x: X4, y: Y2, rotate: 180 },
+			{ x: X3, y: Y4, rotate: 180 },
+
+			// 9-12
+			{ x: X6, y: Y1, rotate: 0 },
+			{ x: X2, y: Y2, rotate: 180 },
+			{ x: X7, y: Y3, rotate: 0 },
+			{ x: X1, y: Y4, rotate: 180 },
+
+			// 13-16
+			{ x: X8, y: Y1, rotate: 0 },
+			{ x: X9, y: Y3, rotate: 0 },
+			{ x: X3, y: Y3, rotate: 0 },
+			{ x: X9, y: Y4, rotate: 180 },
+
+			// 17-20
+			{ x: X10, y: Y1, rotate: 0 },
+			{ x: X1, y: Y3, rotate: 0 },
+			{ x: X5, y: Y3, rotate: 0 },
+			{ x: X7, y: Y4, rotate: 180 },
+		].map(({ x, y, rotate }, n) => {
+			setSvgTextInfo(infos[n], x, y, rotate);
+		});
 	}
 }

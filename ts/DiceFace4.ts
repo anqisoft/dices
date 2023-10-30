@@ -2,6 +2,12 @@ import DiceBase from './DiceBase.ts';
 
 export default class DiceFace4 extends DiceBase {
 	protected drawGraphs() {
+		if (this.TEXT_STYLE.length === 0) {
+			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
+				this.SIDE_LENGTH * 0.25
+			}mm;`;
+		}
+
 		const HEIGHT_OF_ONE = this.SIDE_LENGTH * 1.732 * 0.5;
 		const HEIGHT_OF_TWO = HEIGHT_OF_ONE * 2;
 
@@ -76,7 +82,8 @@ export default class DiceFace4 extends DiceBase {
 			this.viewBox,
 		);
 
-		const EXTNED_SCALE = 0.15;
+		const { SIDE_LENGTH } = this;
+		const EXTNED_SCALE = SIDE_LENGTH < 3 ? 1 : (SIDE_LENGTH <= 10 ? 0.5 : 0.15);
 		const EXTNED_LENGTH = EXTNED_SCALE * this.SIDE_LENGTH;
 		const OFFSET_X = EXTNED_LENGTH * 0.5;
 		const OFFSET_Y = EXTNED_LENGTH * Math.cos(30 / 180 * Math.PI);
@@ -216,173 +223,51 @@ export default class DiceFace4 extends DiceBase {
 	}
 
 	protected setTextsInfo() {
-		// 12 text elements.
+		// 12 text elements: 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4
+		// console.log(this.infos);
 
-		// this.setSvgTextInfo(infos[0], SIDE_LENGTH * 25.0 / 25, SIDE_LENGTH * 18.0 / 25, 0);
-		// this.setSvgTextInfo(infos[1], SIDE_LENGTH * 21.0 / 25, SIDE_LENGTH * 9.5 / 25, -120);
-		// this.setSvgTextInfo(infos[2], SIDE_LENGTH * 31.0 / 25, SIDE_LENGTH * 11.5 / 25, 120);
-		// this.setSvgTextInfo(infos[3], SIDE_LENGTH * 37.5 / 25, SIDE_LENGTH * 40.0 / 25, 0);
-		// this.setSvgTextInfo(infos[4], SIDE_LENGTH * 19.0 / 25, SIDE_LENGTH * 33.0 / 25, 120);
-		// this.setSvgTextInfo(infos[5], SIDE_LENGTH * 30.0 / 25, SIDE_LENGTH * 31.5 / 25, 60);
-		// this.setSvgTextInfo(infos[6], SIDE_LENGTH * 12.5 / 25, SIDE_LENGTH * 40.0 / 25, 0);
-		// this.setSvgTextInfo(infos[7], SIDE_LENGTH * 32.5 / 25, SIDE_LENGTH * 32.0 / 25, -120);
-		// this.setSvgTextInfo(infos[8], SIDE_LENGTH * 20.0 / 25, SIDE_LENGTH * 30.0 / 25, -60);
-		// this.setSvgTextInfo(infos[9], SIDE_LENGTH * 27.0 / 25, SIDE_LENGTH * 22.0 / 25, 180);
-		// this.setSvgTextInfo(infos[10], SIDE_LENGTH * 9.5 / 25, SIDE_LENGTH * 31.5 / 25, -120);
-		// this.setSvgTextInfo(infos[11], SIDE_LENGTH * 42.0 / 25, SIDE_LENGTH * 33.0 / 25, 120);
+		const SIN60 = Math.sin(Math.PI * 60 / 180);
+		const COS60 = Math.cos(Math.PI * 60 / 180);
+		const HALF_COS60_AND_OFFSET = COS60 * 0.75;
+		const MINI_OFFSET_SCALE_OF_Y = COS60 * 0.075;
 
-		if (this.CONTENTS.join(',') === 'ˉ,ˊ,ˇ,ˋ') {
-			this.setSvgTextInfo(
-				this.infos[0],
-				this.SIDE_LENGTH * 24.5 / 25,
-				this.SIDE_LENGTH * 22.5 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[1],
-				this.SIDE_LENGTH * 20.0 / 25,
-				this.SIDE_LENGTH * 13.5 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[2],
-				this.SIDE_LENGTH * 30.0 / 25,
-				this.SIDE_LENGTH * 15.0 / 25,
-				120,
-			);
+		const { infos, SIDE_LENGTH, setSvgTextInfo } = this;
 
-			this.setSvgTextInfo(
-				this.infos[3],
-				this.SIDE_LENGTH * 37.5 / 25,
-				this.SIDE_LENGTH * 44.0 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[4],
-				this.SIDE_LENGTH * 18.5 / 25,
-				this.SIDE_LENGTH * 36.0 / 25,
-				120,
-			);
-			this.setSvgTextInfo(
-				this.infos[5],
-				this.SIDE_LENGTH * 30.0 / 25,
-				this.SIDE_LENGTH * 34.0 / 25,
-				60,
-			);
+		const X1 = SIDE_LENGTH * HALF_COS60_AND_OFFSET;
+		const X2 = SIDE_LENGTH * 0.5;
+		const X3 = SIDE_LENGTH * (1 - HALF_COS60_AND_OFFSET);
+		const X4 = SIDE_LENGTH * (0.5 + HALF_COS60_AND_OFFSET);
+		const X5 = SIDE_LENGTH * 1;
+		const X6 = SIDE_LENGTH * (1.5 - HALF_COS60_AND_OFFSET);
+		const X7 = SIDE_LENGTH * (1 + HALF_COS60_AND_OFFSET);
+		const X8 = SIDE_LENGTH * 1.5;
+		const X9 = SIDE_LENGTH * (2 - HALF_COS60_AND_OFFSET);
 
-			this.setSvgTextInfo(
-				this.infos[6],
-				this.SIDE_LENGTH * 12.5 / 25,
-				this.SIDE_LENGTH * 44.0 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[7],
-				this.SIDE_LENGTH * 32.0 / 25,
-				this.SIDE_LENGTH * 35.5 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[8],
-				this.SIDE_LENGTH * 20.0 / 25,
-				this.SIDE_LENGTH * 33.0 / 25,
-				-60,
-			);
+		const Y1 = SIDE_LENGTH * (SIN60 * 0.5 + MINI_OFFSET_SCALE_OF_Y);
+		const Y2 = SIDE_LENGTH * SIN60 * 0.85;
+		const Y3 = SIDE_LENGTH * SIN60 * 1.15;
+		const Y4 = SIDE_LENGTH * (SIN60 * 1.5 - MINI_OFFSET_SCALE_OF_Y);
+		const Y5 = SIDE_LENGTH * (SIN60 * 1.5 + MINI_OFFSET_SCALE_OF_Y);
+		const Y6 = SIDE_LENGTH * SIN60 * 1.85;
 
-			this.setSvgTextInfo(
-				this.infos[9],
-				this.SIDE_LENGTH * 27.5 / 25,
-				this.SIDE_LENGTH * 25.0 / 25,
-				180,
-			);
-			this.setSvgTextInfo(
-				this.infos[10],
-				this.SIDE_LENGTH * 8.0 / 25,
-				this.SIDE_LENGTH * 35.0 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[11],
-				this.SIDE_LENGTH * 42.0 / 25,
-				this.SIDE_LENGTH * 36.0 / 25,
-				120,
-			);
-		} else {
-			this.setSvgTextInfo(
-				this.infos[0],
-				this.SIDE_LENGTH * 24.5 / 25,
-				this.SIDE_LENGTH * 19.0 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[1],
-				this.SIDE_LENGTH * 21.0 / 25,
-				this.SIDE_LENGTH * 10.5 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[2],
-				this.SIDE_LENGTH * 30.0 / 25,
-				this.SIDE_LENGTH * 12.5 / 25,
-				120,
-			);
+		[
+			{ x: X5, y: Y2, rotate: 0 },
+			{ x: X3, y: Y5, rotate: -120 },
+			{ x: X7, y: Y5, rotate: 120 },
 
-			this.setSvgTextInfo(
-				this.infos[3],
-				this.SIDE_LENGTH * 37.5 / 25,
-				this.SIDE_LENGTH * 41.0 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[4],
-				this.SIDE_LENGTH * 18.5 / 25,
-				this.SIDE_LENGTH * 34.0 / 25,
-				120,
-			);
-			this.setSvgTextInfo(
-				this.infos[5],
-				this.SIDE_LENGTH * 30.0 / 25,
-				this.SIDE_LENGTH * 32.5 / 25,
-				60,
-			);
+			{ x: X4, y: Y1, rotate: 120 },
+			{ x: X4, y: Y4, rotate: 60 },
+			{ x: X8, y: Y6, rotate: 0 },
 
-			this.setSvgTextInfo(
-				this.infos[6],
-				this.SIDE_LENGTH * 12.5 / 25,
-				this.SIDE_LENGTH * 41.0 / 25,
-				0,
-			);
-			this.setSvgTextInfo(
-				this.infos[7],
-				this.SIDE_LENGTH * 32.5 / 25,
-				this.SIDE_LENGTH * 32.5 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[8],
-				this.SIDE_LENGTH * 19.5 / 25,
-				this.SIDE_LENGTH * 31.0 / 25,
-				-60,
-			);
+			{ x: X6, y: Y1, rotate: -120 },
+			{ x: X6, y: Y4, rotate: -60 },
+			{ x: X2, y: Y6, rotate: 0 },
 
-			this.setSvgTextInfo(
-				this.infos[9],
-				this.SIDE_LENGTH * 26.5 / 25,
-				this.SIDE_LENGTH * 23.5 / 25,
-				180,
-			);
-			this.setSvgTextInfo(
-				this.infos[10],
-				this.SIDE_LENGTH * 8.5 / 25,
-				this.SIDE_LENGTH * 32.5 / 25,
-				-120,
-			);
-			this.setSvgTextInfo(
-				this.infos[11],
-				this.SIDE_LENGTH * 41.0 / 25,
-				this.SIDE_LENGTH * 34.0 / 25,
-				120,
-			);
-		}
+			{ x: X5, y: Y3, rotate: -180 },
+			{ x: X1, y: Y5, rotate: 120 },
+			{ x: X9, y: Y5, rotate: -120 },
+		].map(({ x, y, rotate }, n) => {
+			setSvgTextInfo(infos[n], x, y, rotate);
+		});
 	}
 }

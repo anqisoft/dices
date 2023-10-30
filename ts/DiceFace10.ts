@@ -2,53 +2,66 @@ import DiceBase from './DiceBase.ts';
 import { I18nable } from './dom.ts';
 
 export default class DiceFace10 extends DiceBase {
-	constructor(
-		svg: SVGElement,
-		SIDE_LENGTH: number,
-		INNER_LINE_STYLE: string,
-		OUTER_LINE_STYLE: string,
-		viewBox: { left: number; right: number; top: number; bottom: number },
-		OPTIONS: object,
-		mmToPxScale: number,
-		infos: {
-			content: I18nable | string;
-			x: number;
-			y: number;
-			rotate: number | 'auto' | 'auto-reverse';
-		}[],
-		CONTENTS: (I18nable | string)[],
-		PASTE_WIDTH: number = 0,
-		TEXT_STYLE: string | null = null,
-	) {
-		const { max, min, sin, cos, tan, atan, PI, abs } = Math;
+	// constructor(
+	// 	svg: SVGElement,
+	// 	SIDE_LENGTH: number,
+	// 	INNER_LINE_STYLE: string,
+	// 	OUTER_LINE_STYLE: string,
+	// 	viewBox: { left: number; right: number; top: number; bottom: number },
+	// 	OPTIONS: object,
+	// 	mmToPxScale: number,
+	// 	infos: {
+	// 		content: I18nable | string;
+	// 		x: number;
+	// 		y: number;
+	// 		rotate: number | 'auto' | 'auto-reverse';
+	// 	}[],
+	// 	CONTENTS: (I18nable | string)[],
+	// 	PASTE_WIDTH: number = 0,
+	// 	TEXT_STYLE: string | null = null,
+	// ) {
+	// 	const { max, min, sin, cos, tan, atan, PI, abs } = Math;
 
-		SIDE_LENGTH = max(1, SIDE_LENGTH || 10);
-		PASTE_WIDTH = max(1, PASTE_WIDTH || 5, SIDE_LENGTH);
-		if (SIDE_LENGTH <= 5) PASTE_WIDTH = max(min(3, SIDE_LENGTH), PASTE_WIDTH);
+	// 	SIDE_LENGTH = max(1, SIDE_LENGTH || 10);
 
-		if (!TEXT_STYLE) TEXT_STYLE = `font-size:${5 * SIDE_LENGTH / 10}mm`;
+	// 	// PASTE_WIDTH = max(1, PASTE_WIDTH || 5, SIDE_LENGTH);
+	// 	// if (SIDE_LENGTH <= 5) PASTE_WIDTH = max(min(3, SIDE_LENGTH), PASTE_WIDTH);
+	// 	const EXTNED_SCALE = SIDE_LENGTH < 3 ? 1 : (SIDE_LENGTH <= 10 ? 0.5 : 0.25);
+	// 	PASTE_WIDTH = PASTE_WIDTH || SIDE_LENGTH * EXTNED_SCALE;
 
-		super(
-			svg,
-			SIDE_LENGTH,
-			INNER_LINE_STYLE,
-			OUTER_LINE_STYLE,
-			viewBox,
-			OPTIONS,
-			mmToPxScale,
-			infos,
-			CONTENTS,
-			PASTE_WIDTH,
-		);
-	}
+	// 	if (!TEXT_STYLE) TEXT_STYLE = `font-size:${5 * SIDE_LENGTH / 10}mm`;
+
+	// 	super(
+	// 		svg,
+	// 		SIDE_LENGTH,
+	// 		INNER_LINE_STYLE,
+	// 		OUTER_LINE_STYLE,
+	// 		viewBox,
+	// 		OPTIONS,
+	// 		mmToPxScale,
+	// 		infos,
+	// 		CONTENTS,
+	// 		PASTE_WIDTH,
+	// 	);
+	// }
 
 	protected drawGraphs() {
+		if (this.TEXT_STYLE.length === 0) {
+			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
+				this.SIDE_LENGTH * 0.45
+			}mm;`;
+		}
+
+		// console.log('drawGraphs()');
 		const { max, min, sin, cos, tan, atan, PI, abs } = Math;
 
-		const { SIDE_LENGTH: SIDE, PASTE_WIDTH, drawInnerLine, drawOuterLine } = this;
+		const { SIDE_LENGTH, svg, viewBox, appendLine, OUTER_LINE_STYLE, INNER_LINE_STYLE } = this;
 
-		const X_O1 = SIDE * 2.55;
-		const Y_O1 = SIDE * 2.55;
+		const PASTE_SCALE = SIDE_LENGTH < 3 ? 1 : (SIDE_LENGTH <= 10 ? 0.5 : 0.25);
+		const PASTE_WIDTH = SIDE_LENGTH * PASTE_SCALE;
+
+		const X_O1 = SIDE_LENGTH * 2.55;
+		const Y_O1 = SIDE_LENGTH * 2.55;
 
 		// const ANGLE_SMALL = 50.22 * PI / 180;
 		// const ANGLE_MIDDLE = 94.5 * PI / 180;
@@ -69,8 +82,8 @@ export default class DiceFace10 extends DiceBase {
 
 		const ANGLE_B1 = ANGLE_90 - HALF_ANGLE_SMALL;
 		const ANGLE_B2 = ANGLE_MIDDLE - ANGLE_B1;
-		const SIDE_V1 = SIDE * sin(ANGLE_B2);
-		const SIDE_H1 = SIDE * cos(ANGLE_B2);
+		const SIDE_V1 = SIDE_LENGTH * sin(ANGLE_B2);
+		const SIDE_H1 = SIDE_LENGTH * cos(ANGLE_B2);
 		const SIDE_LONG = SIDE_H1 / sin(HALF_ANGLE_SMALL);
 		const SIDE_V2 = SIDE_LONG * sin(ANGLE_B1);
 		const SIZE_LONG_MIDLINE = SIDE_V1 + SIDE_V2;
@@ -262,94 +275,95 @@ export default class DiceFace10 extends DiceBase {
 		const X_J1E2 = X_J1 - PASTE_WIDTH * cos(ANGLE_J1E2);
 		const Y_J1E2 = Y_J1 - PASTE_WIDTH * sin(ANGLE_J1E2);
 
-		drawOuterLine(X_B1E, X_B1, Y_B1E, Y_B1);
-		drawOuterLine(X_B1E, X_C1E1, Y_B1E, Y_C1E1);
-		drawOuterLine(X_C1E1, X_C1, Y_C1E1, Y_C1);
+		// console.log('DiceFace10', this.svg);
+		appendLine(svg, OUTER_LINE_STYLE, X_B1E, X_B1, Y_B1E, Y_B1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_B1E, X_C1E1, Y_B1E, Y_C1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_C1E1, X_C1, Y_C1E1, Y_C1, viewBox);
 
-		// drawOuterLine(X_C1, X_C1E2, Y_C1, Y_C1E2);
-		// drawOuterLine(X_C1E2, X_D1E1, Y_C1E2, Y_D1E1);
-		// drawOuterLine(X_D1E1, X_D1, Y_D1E1, Y_D1);
-		drawOuterLine(X_C1, X_C1E2, Y_C1, Y_C1E2);
-		drawOuterLine(X_C1E2, X_D1E1, Y_C1E2, Y_D1E1);
-		drawOuterLine(X_D1E1, X_D1, Y_D1E1, Y_D1);
+		// appendLine(svg, OUTER_LINE_STYLE, X_C1, X_C1E2, Y_C1, Y_C1E2, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_C1E2, X_D1E1, Y_C1E2, Y_D1E1, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_D1E1, X_D1, Y_D1E1, Y_D1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_C1, X_C1E2, Y_C1, Y_C1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_C1E2, X_D1E1, Y_C1E2, Y_D1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_D1E1, X_D1, Y_D1E1, Y_D1, viewBox);
 
-		drawOuterLine(X_D1, X_D1E2, Y_D1, Y_D1E2);
-		drawOuterLine(X_D1E2, X_E1E1, Y_D1E2, Y_E1E1);
-		drawOuterLine(X_E1E1, X_E1, Y_E1E1, Y_E1);
+		appendLine(svg, OUTER_LINE_STYLE, X_D1, X_D1E2, Y_D1, Y_D1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_D1E2, X_E1E1, Y_D1E2, Y_E1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_E1E1, X_E1, Y_E1E1, Y_E1, viewBox);
 
-		drawOuterLine(X_E1, X_E1E2, Y_E1, Y_E1E2);
-		drawOuterLine(X_E1E2, X_F1E1, Y_E1E2, Y_F1E1);
-		drawOuterLine(X_F1E1, X_F1, Y_F1E1, Y_F1);
+		appendLine(svg, OUTER_LINE_STYLE, X_E1, X_E1E2, Y_E1, Y_E1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_E1E2, X_F1E1, Y_E1E2, Y_F1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_F1E1, X_F1, Y_F1E1, Y_F1, viewBox);
 
-		drawOuterLine(X_F1, X_F1E2, Y_F1, Y_F1E2);
-		drawOuterLine(X_F1E2, X_G1E1, Y_F1E2, Y_G1E1);
-		drawOuterLine(X_G1E1, X_G1, Y_G1E1, Y_G1);
+		appendLine(svg, OUTER_LINE_STYLE, X_F1, X_F1E2, Y_F1, Y_F1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_F1E2, X_G1E1, Y_F1E2, Y_G1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_G1E1, X_G1, Y_G1E1, Y_G1, viewBox);
 
-		drawOuterLine(X_G1, X_G1E2, Y_G1, Y_G1E2);
-		drawOuterLine(X_G1E2, X_H1E1, Y_G1E2, Y_H1E1);
-		drawOuterLine(X_H1E1, X_H1, Y_H1E1, Y_H1);
+		appendLine(svg, OUTER_LINE_STYLE, X_G1, X_G1E2, Y_G1, Y_G1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_G1E2, X_H1E1, Y_G1E2, Y_H1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_H1E1, X_H1, Y_H1E1, Y_H1, viewBox);
 
-		drawOuterLine(X_H1, X_H1E2, Y_H1, Y_H1E2);
-		drawOuterLine(X_H1E2, X_I1E1, Y_H1E2, Y_I1E1);
-		drawOuterLine(X_I1E1, X_I1, Y_I1E1, Y_I1);
+		appendLine(svg, OUTER_LINE_STYLE, X_H1, X_H1E2, Y_H1, Y_H1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_H1E2, X_I1E1, Y_H1E2, Y_I1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_I1E1, X_I1, Y_I1E1, Y_I1, viewBox);
 
-		drawOuterLine(X_I1, X_I1E2, Y_I1, Y_I1E2);
-		drawOuterLine(X_I1E2, X_J1E1, Y_I1E2, Y_J1E1);
-		drawOuterLine(X_J1E1, X_J1, Y_J1E1, Y_J1);
+		appendLine(svg, OUTER_LINE_STYLE, X_I1, X_I1E2, Y_I1, Y_I1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_I1E2, X_J1E1, Y_I1E2, Y_J1E1, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_J1E1, X_J1, Y_J1E1, Y_J1, viewBox);
 
-		drawOuterLine(X_J1, X_J1E2, Y_J1, Y_J1E2);
-		drawOuterLine(X_J1E2, X_K1E, Y_J1E2, Y_K1E);
-		drawOuterLine(X_K1E, X_K1, Y_K1E, Y_K1);
-		// drawOuterLine(X_J1E2, X_K1E1, Y_J1E2, Y_K1E1);
-		// drawOuterLine(X_K1E1, X_K1, Y_K1E1, Y_K1);
+		appendLine(svg, OUTER_LINE_STYLE, X_J1, X_J1E2, Y_J1, Y_J1E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_J1E2, X_K1E, Y_J1E2, Y_K1E, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_K1E, X_K1, Y_K1E, Y_K1, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_J1E2, X_K1E1, Y_J1E2, Y_K1E1, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_K1E1, X_K1, Y_K1E1, Y_K1, viewBox);
 
-		// drawOuterLine(X_K1, X_K1E2, Y_K1, Y_K1E2);
-		// drawOuterLine(X_K1E2, X_1E1, Y_K1E2, Y_1E1);
-		// drawOuterLine(X_1E1, X_1, Y_1E1, Y_1);
+		// appendLine(svg, OUTER_LINE_STYLE, X_K1, X_K1E2, Y_K1, Y_K1E2, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_K1E2, X_1E1, Y_K1E2, Y_1E1, viewBox);
+		// appendLine(svg, OUTER_LINE_STYLE, X_1E1, X_1, Y_1E1, Y_1, viewBox);
 
-		drawOuterLine(X_O1, X_K1, Y_O1, Y_K1);
-		drawInnerLine(X_K1, X_J1, Y_K1, Y_J1);
-		drawInnerLine(X_J1, X_I1, Y_J1, Y_I1);
-		drawInnerLine(X_I1, X_H1, Y_I1, Y_H1);
-		drawInnerLine(X_H1, X_G1, Y_H1, Y_G1);
-		drawInnerLine(X_G1, X_F1, Y_G1, Y_F1);
-		drawInnerLine(X_F1, X_E1, Y_F1, Y_E1);
-		drawInnerLine(X_E1, X_D1, Y_E1, Y_D1);
-		drawInnerLine(X_D1, X_C1, Y_D1, Y_C1);
-		drawInnerLine(X_C1, X_B1, Y_C1, Y_B1);
-		drawInnerLine(X_B1, X_A1, Y_B1, Y_A1);
-		drawInnerLine(X_O1, X_I1, Y_O1, Y_I1);
-		drawInnerLine(X_O1, X_G1, Y_O1, Y_G1);
-		drawInnerLine(X_O1, X_E1, Y_O1, Y_E1);
-		drawInnerLine(X_O1, X_C1, Y_O1, Y_C1);
-		drawInnerLine(X_O1, X_A1, Y_O1, Y_A1);
+		appendLine(svg, OUTER_LINE_STYLE, X_O1, X_K1, Y_O1, Y_K1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_K1, X_J1, Y_K1, Y_J1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_J1, X_I1, Y_J1, Y_I1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_I1, X_H1, Y_I1, Y_H1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_H1, X_G1, Y_H1, Y_G1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_G1, X_F1, Y_G1, Y_F1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_F1, X_E1, Y_F1, Y_E1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_E1, X_D1, Y_E1, Y_D1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_D1, X_C1, Y_D1, Y_C1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_C1, X_B1, Y_C1, Y_B1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_B1, X_A1, Y_B1, Y_A1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O1, X_I1, Y_O1, Y_I1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O1, X_G1, Y_O1, Y_G1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O1, X_E1, Y_O1, Y_E1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O1, X_C1, Y_O1, Y_C1, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O1, X_A1, Y_O1, Y_A1, viewBox);
 
-		drawOuterLine(X_O2, X_K2, Y_O2, Y_K2);
-		drawOuterLine(X_K2, X_J2, Y_K2, Y_J2);
-		drawOuterLine(X_J2, X_I2, Y_J2, Y_I2);
-		drawOuterLine(X_I2, X_H2, Y_I2, Y_H2);
-		drawOuterLine(X_H2, X_G2, Y_H2, Y_G2);
-		drawOuterLine(X_G2, X_F2, Y_G2, Y_F2);
-		drawOuterLine(X_F2, X_E2, Y_F2, Y_E2);
-		drawOuterLine(X_E2, X_D2, Y_E2, Y_D2);
-		drawOuterLine(X_D2, X_C2, Y_D2, Y_C2);
-		drawInnerLine(X_C2, X_B2, Y_C2, Y_B2);
-		drawOuterLine(X_B2, X_A2, Y_B2, Y_A2);
-		drawInnerLine(X_O2, X_I2, Y_O2, Y_I2);
-		drawInnerLine(X_O2, X_G2, Y_O2, Y_G2);
-		drawInnerLine(X_O2, X_E2, Y_O2, Y_E2);
-		drawInnerLine(X_O2, X_C2, Y_O2, Y_C2);
-		drawInnerLine(X_O2, X_A2, Y_O2, Y_A2);
+		appendLine(svg, OUTER_LINE_STYLE, X_O2, X_K2, Y_O2, Y_K2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_K2, X_J2, Y_K2, Y_J2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_J2, X_I2, Y_J2, Y_I2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_I2, X_H2, Y_I2, Y_H2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_H2, X_G2, Y_H2, Y_G2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_G2, X_F2, Y_G2, Y_F2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_F2, X_E2, Y_F2, Y_E2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_E2, X_D2, Y_E2, Y_D2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_D2, X_C2, Y_D2, Y_C2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_C2, X_B2, Y_C2, Y_B2, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_B2, X_A2, Y_B2, Y_A2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O2, X_I2, Y_O2, Y_I2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O2, X_G2, Y_O2, Y_G2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O2, X_E2, Y_O2, Y_E2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O2, X_C2, Y_O2, Y_C2, viewBox);
+		appendLine(svg, INNER_LINE_STYLE, X_O2, X_A2, Y_O2, Y_A2, viewBox);
 
-		drawOuterLine(X_O1, X_O1E, Y_O1, Y_O1E);
-		drawOuterLine(X_O1E, X_A1E, Y_O1E, Y_A1E);
-		drawOuterLine(X_A1E, X_A1, Y_A1E, Y_A1);
+		appendLine(svg, OUTER_LINE_STYLE, X_O1, X_O1E, Y_O1, Y_O1E, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_O1E, X_A1E, Y_O1E, Y_A1E, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_A1E, X_A1, Y_A1E, Y_A1, viewBox);
 
-		drawOuterLine(X_K1E, X_K1, Y_K1E, Y_K1);
+		appendLine(svg, OUTER_LINE_STYLE, X_K1E, X_K1, Y_K1E, Y_K1, viewBox);
 
-		drawOuterLine(X_O2, X_O2E, Y_O2, Y_O2E);
-		drawOuterLine(X_O2E, X_A2E, Y_O2E, Y_A2E);
-		drawOuterLine(X_A2E, X_A2, Y_A2E, Y_A2);
+		appendLine(svg, OUTER_LINE_STYLE, X_O2, X_O2E, Y_O2, Y_O2E, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_O2E, X_A2E, Y_O2E, Y_A2E, viewBox);
+		appendLine(svg, OUTER_LINE_STYLE, X_A2E, X_A2, Y_A2E, Y_A2, viewBox);
 
 		this.textData = {
 			X_A1,
@@ -385,7 +399,12 @@ export default class DiceFace10 extends DiceBase {
 	private textData: DiceFace10TextDataType | undefined;
 
 	protected setTextsInfo() {
-		const { CONTENTS } = this;
+		// 10 text elements: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+		// console.log(this.infos);
+
+		// SIDE_LENGTH,
+		const { infos, setSvgTextInfo } = this;
+
 		const {
 			X_A1,
 			X_A2,
@@ -417,21 +436,6 @@ export default class DiceFace10 extends DiceBase {
 		} = this.textData as DiceFace10TextDataType;
 
 		[
-			// { x: (X_A2 + X_C2) * 0.5, y: (Y_A2 + Y_C2) * 0.5, rotate: 0 }, // 2OABC, 1
-			// { x: (X_I1 + X_K1) * 0.5, y: (Y_I1 + Y_K1) * 0.5, rotate: 360 - ANGLE_SMALL_DEGREE * 4 }, // 1OIJK, 2
-
-			// { x: (X_E2 + X_G2) * 0.5, y: (Y_E2 + Y_G2) * 0.5, rotate: ANGLE_SMALL_DEGREE * 2 }, // 2OEFG, 3
-			// { x: (X_C1 + X_E1) * 0.5, y: (Y_C1 + Y_E1) * 0.5, rotate: - ANGLE_SMALL_DEGREE }, // 1OCDE, 4
-
-			// { x: (X_I2 + X_K2) * 0.5, y: (Y_I2 + Y_K2) * 0.5, rotate: ANGLE_SMALL_DEGREE * 4 }, // 2OIJK, 5
-			// { x: (X_E1 + X_G1) * 0.5, y: (Y_E1 + Y_G1) * 0.5, rotate: 360 - ANGLE_SMALL_DEGREE * 2 }, // 1OEFG, 6
-
-			// { x: (X_G2 + X_I2) * 0.5, y: (Y_G2 + Y_I2) * 0.5, rotate: ANGLE_SMALL_DEGREE * 3 }, // 2OGHI, 7
-			// { x: (X_A1 + X_C1) * 0.5, y: (Y_A1 + Y_C1) * 0.5, rotate: 0 }, // 1OABC, 8
-
-			// { x: (X_C2 + X_E2) * 0.5, y: (Y_C2 + Y_E2) * 0.5, rotate: ANGLE_SMALL_DEGREE }, // 2OCDE, 9
-			// { x: (X_G1 + X_I1) * 0.5, y: (Y_G1 + Y_I1) * 0.5, rotate: 360 - ANGLE_SMALL_DEGREE * 3 }, // 1OGHI, 10
-
 			{ x: (X_A2 + X_C2) * 0.5, y: (Y_A2 + Y_C2) * 0.5, rotate: 0 }, // 2OABC, 1
 			{ x: (X_G1 + X_I1) * 0.5, y: (Y_G1 + Y_I1) * 0.5, rotate: 360 - ANGLE_SMALL_DEGREE * 3 }, // 1OIJK, 2
 
@@ -446,8 +450,8 @@ export default class DiceFace10 extends DiceBase {
 
 			{ x: (X_C2 + X_E2) * 0.5, y: (Y_C2 + Y_E2) * 0.5, rotate: ANGLE_SMALL_DEGREE }, // 2OCDE, 9
 			{ x: (X_E1 + X_G1) * 0.5, y: (Y_E1 + Y_G1) * 0.5, rotate: 360 - ANGLE_SMALL_DEGREE * 2 }, // 1OGHI, 10
-		].map(({ x, y, rotate }, i) => {
-			this.infos.push({ content: CONTENTS[i], x, y, rotate });
+		].map(({ x, y, rotate }, n) => {
+			setSvgTextInfo(infos[n], x, y, rotate);
 		});
 	}
 }
