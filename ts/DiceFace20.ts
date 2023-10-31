@@ -3,11 +3,7 @@ import { SVG_NS } from './svgHelper.ts';
 
 export default class DiceFace20 extends DiceBase {
 	protected drawGraphs() {
-		if (this.TEXT_STYLE.length === 0) {
-			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
-				this.SIDE_LENGTH * 0.45
-			}mm;`;
-		}
+		this.fixTextStyle(0.45);
 
 		// const pasteRegionScale = 0.2;
 		const { SIDE_LENGTH } = this;

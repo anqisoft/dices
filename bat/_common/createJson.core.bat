@@ -119,7 +119,7 @@ for %%l in (!langSet!) do (
         if "!lang!:!face!:!no!:!landscape!" == "zh_tw:24:8:true" (
           set endChar=
         )
-        echo   { "url": "!url!?lang=!lang!&landscape=!landscape!&face=!face!&no=!no!&top=10&left=10", "pdf": "!pdfPath!!lang!\\!face!_!no!_!pdfFile!.pdf", "params": { } }!endChar!>>%goal%
+        echo   { "url": "!url!?lang=!lang!&landscape=!landscape!&face=!face!&no=!no!&top=10&left=10", "pdf": "!pdfPath!!lang!\\!pdfFile!\\!face!_!no!.pdf", "params": { } }!endChar!>>%goal%
       )
     )
   )

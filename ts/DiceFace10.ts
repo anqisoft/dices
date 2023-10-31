@@ -46,12 +46,8 @@ export default class DiceFace10 extends DiceBase {
 	// }
 
 	protected drawGraphs() {
-		if (this.TEXT_STYLE.length === 0) {
-			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
-				this.SIDE_LENGTH * 0.45
-			}mm;`;
-		}
-
+		this.fixTextStyle(0.45);
+		
 		// console.log('drawGraphs()');
 		const { max, min, sin, cos, tan, atan, PI, abs } = Math;
 

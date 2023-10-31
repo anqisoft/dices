@@ -2,11 +2,7 @@ import DiceBase from './DiceBase.ts';
 
 export default class DiceFace24 extends DiceBase {
 	protected drawGraphs() {
-		if (this.TEXT_STYLE.length === 0) {
-			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
-				this.SIDE_LENGTH * 0.8
-			}mm;`;
-		}
+		this.fixTextStyle(0.8);
 
 		const ANGLE = 48.275;
 		const { SIDE_LENGTH } = this;

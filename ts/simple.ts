@@ -19,6 +19,7 @@ import { createPageElement } from './dom.ts';
 	//   .replace(/&inner_line_style=/gi, '&inner_line_style=')
 	//   .replace(/&text_style=/gi, '&text_style=')
 	// ;
+	const FONT_SIZE = getPageParameterByName('font_size', '');
 
 	const FACE_IN_URL = parseInt(getPageParameterByName('face', '0'));
 	const FACE = FACE_IN_URL || 4;
@@ -91,7 +92,7 @@ import { createPageElement } from './dom.ts';
 			'关汉卿拜月亭、王实甫西厢记、白朴墙头马上、郑光祖倩女离魂'.split('、'),
 			'应天府书院、岳麓书院、白鹿洞书院、嵩阳书院'.split('、'),
 			'京剧、黄梅戏、越剧、豫剧'.split('、'),
-			'久旱逢甘雨，他乡遇故知，洞房花烛夜，金榜题名时'.split('、'),
+			'久旱逢甘雨、他乡遇故知、洞房花烛夜、金榜题名时'.split('、'),
 			'牛郎织女、孟姜女、梁山伯与祝英台、白蛇传'.split('、'),
 			'李宝嘉官场现形记、吴趼人二十年目睹之怪现状、刘鹗老残游记、曾朴孽海花'.split('、'),
 			'敦煌莫高窟、洛阳龙门石窟、大同云冈石窟、天水麦积山石窟'.split('、'),
@@ -189,7 +190,7 @@ import { createPageElement } from './dom.ts';
 			'轮、螺、伞、盖、花、瓶、鱼、长'.split('、'),
 
 			// https://baike.baidu.com/item/%E5%85%AB%E9%A3%8E/4913968
-			'东明庶风，东南清明风，南曰景风，西南凉风，西阊阖风，西北不周风，北方广莫风，东北融风'.split(
+			'东明庶风、东南清明风、南曰景风、西南凉风、西阊阖风、西北不周风、北方广莫风、东北融风'.split(
 				'、',
 			),
 		],
@@ -406,7 +407,7 @@ import { createPageElement } from './dom.ts';
 
 	const diceGenerator = new DiceGenerator();
 
-	const OPTIONS = {};
+	const OPTIONS = { FONT_SIZE };
 	const DICE_INFO = diceGenerator.create({
 		id: 'svg_1',
 		diceKind, // DiceKind.four,

@@ -2,11 +2,7 @@ import DiceBase from './DiceBase.ts';
 
 export default class DiceFace4 extends DiceBase {
 	protected drawGraphs() {
-		if (this.TEXT_STYLE.length === 0) {
-			this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
-				this.SIDE_LENGTH * 0.25
-			}mm;`;
-		}
+		this.fixTextStyle(0.25);
 
 		const HEIGHT_OF_ONE = this.SIDE_LENGTH * 1.732 * 0.5;
 		const HEIGHT_OF_TWO = HEIGHT_OF_ONE * 2;
