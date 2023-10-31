@@ -1,0 +1,1 @@
+call ..\..\_common\createJson.core.bat local "" simple local test

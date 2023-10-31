@@ -1,0 +1,1 @@
+@call ..\..\_common\run.python.core.bat server min

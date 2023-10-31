@@ -26,9 +26,12 @@ export const CURRENT_URL = window.location.href;
  * <zh_cn>首页网址</zh_cn>
  * <zh_tw>首頁網址</zh_tw>
  */
+// export const HOME_URL = CURRENT_URL.startsWith('file:///')
+// 	? 'file:///P:/ecs_person/websites/sonya.cc/edu_git/src/index.htm'
+// 	: 'http://edu.sonya.cc/';
 export const HOME_URL = CURRENT_URL.startsWith('file:///')
-	? 'file:///P:/ecs_person/websites/sonya.cc/edu_git/src/index.htm'
-	: 'http://edu.sonya.cc/';
+	? CURRENT_URL.substring(0, CURRENT_URL.lastIndexOf('/') + 1).concat('index.htm')
+	: CURRENT_URL.split('/').splice(0, 3).join('/').concat('/');
 
 /**
  * <en>Temporary closure method: avoid being displayed in iframe by other websites.</en>

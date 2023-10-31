@@ -1,0 +1,1 @@
+call ..\..\_common\createJson.core.bat server min simple server.min test

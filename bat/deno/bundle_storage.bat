@@ -1,1 +1,0 @@
-_bundle_core storage
