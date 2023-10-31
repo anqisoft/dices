@@ -1,0 +1,1 @@
+@deno run -A pdf2png_example.ts || pause
