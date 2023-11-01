@@ -7,7 +7,7 @@
 :: git clone git://github.com/fmarcia/UglifyCSS.git
 :: uglifycss [options] [filename] [...] > output
 
-set CSS_FOLDE=%CD%\..\css\
+set CSS_FOLDE=%CD%\..\dist\css\
 chdir /d "%CSS_FOLDE%"
 title "Compressing the css files of %CSS_FOLDER%"
 

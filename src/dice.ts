@@ -1,6 +1,4 @@
-import { createElement, I18nable } from './dom.ts'; // appendText,
-import DPIHelper from './DPIHelper.ts';
-import { SVG_NS, SVG_XLINKNS, SvgTextInfo } from './svgHelper.ts';
+import { createElement, I18nable, SVG_NS, SVG_XLINKNS, SvgTextInfo, DPIHelper } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
 
 import DiceFace4 from './DiceFace4.ts';
 import DiceFace6 from './DiceFace6.ts';

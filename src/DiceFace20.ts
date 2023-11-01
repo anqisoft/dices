@@ -1,5 +1,5 @@
 import DiceBase from './DiceBase.ts';
-import { SVG_NS } from './svgHelper.ts';
+import { SVG_NS } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
 
 export default class DiceFace20 extends DiceBase {
 	protected drawGraphs() {

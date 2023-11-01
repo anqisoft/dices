@@ -8,7 +8,7 @@
 :: * -m, ¨Cmangle [string]
 :: uglifyjs lazyLoad.js -m -o lazyLoad.min.js
 
-set JS_FOLDER="%CD%\..\js\"
+set JS_FOLDER="%CD%\..\dist\"
 chdir /d %JS_FOLDER%
 
 setlocal enabledelayedexpansion
@@ -25,3 +25,6 @@ for /r . %%a in (*.js) do (
     start /B "" uglifyjs !src! -m -o !goal!
   )
 )
+
+ping 127.0.0.1 -n 3 >nul
+xcopy /y %JS_FOLDER%*.js %JS_FOLDER%..\js\

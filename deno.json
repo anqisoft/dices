@@ -7,7 +7,7 @@
   "importMap": "import_map.json",
   "lint": {
     "files": {
-      "include": ["ts/"],
+      "include": ["src/"],
       "exclude": ["ts/testdata/"]
     },
     "rules": {
@@ -18,7 +18,7 @@
   },
   "fmt": {
     "files": {
-      "include": ["ts/"],
+      "include": ["src/", "test/"],
       "exclude": ["ts/testdata/", "ts/js/", "ts/.vscode/"]
     },
     "options": {

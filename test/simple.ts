@@ -1,7 +1,5 @@
-import { DiceGenerator, DiceKind } from './dice.ts';
-import { AnQiData, getPageCss, parsePageParamsFromUrl } from './const.ts';
-import { getPageParameterByName, setF1Content } from './const.ts';
-import { createPageElement } from './dom.ts';
+import { DiceGenerator, DiceKind } from '../types/dice.d.ts';
+import { AnQiData, getPageCss, parsePageParamsFromUrl, getPageParameterByName, setF1Content, createPageElement } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
 
 (function drawDice() {
 	parsePageParamsFromUrl(window.location.href);
