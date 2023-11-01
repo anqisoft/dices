@@ -1,6 +1,5 @@
 /* 
-  deno run --unstable --allow-net --allow-read --allow-write pdf2png.ts
-  deno run --allow-read --allow-write pdf2png.ts
+  deno run --allow-run --allow-env --allow-net --allow-read --allow-write pdf2png.ts
 */
 
 import * as path from "https://deno.land/std/path/mod.ts";
