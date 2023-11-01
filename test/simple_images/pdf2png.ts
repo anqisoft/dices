@@ -1,5 +1,6 @@
 /* 
-deno run --unstable --allow-net --allow-read deep-loop-travesal.ts
+  deno run --unstable --allow-net --allow-read --allow-write pdf2png.ts
+  deno run --allow-read --allow-write pdf2png.ts
 */
 
 import * as path from "https://deno.land/std/path/mod.ts";
@@ -58,9 +59,15 @@ async function crop(filename: string): void {
   const FIRST_PIXEL = originalImage.getPixelAt(1, 1);
   // console.log(FIRST_PIXEL);
   
+  // <en>Use half-width and half-height for speed.</en>
+  // <zh_cn>使用半宽、半高以加速</zh_cn>
+  // <zh_tw>使用半寬、半高以加速</zh_tw>
+  // const MAX_CHECK_X = originalWidth * 0.5;
+  const MAX_CHECK_Y = originalHeight * 0.5;
+  
   for(let x = 1; x <= originalWidth; ++x) {
     let find = false;
-    for(let y = 1; y <= originalHeight; ++y) {
+    for(let y = 1; y <= MAX_CHECK_Y; ++y) {
       if (originalImage.getPixelAt(x, y) !== FIRST_PIXEL) {
         find = true;
         left = x;
@@ -72,7 +79,7 @@ async function crop(filename: string): void {
 	
   for(let x = originalWidth; x >= left; --x) {
     let find = false;
-    for(let y = 1; y <= originalHeight; ++y) {
+    for(let y = 1; y <= MAX_CHECK_Y; ++y) {
       if (originalImage.getPixelAt(x, y) !== FIRST_PIXEL) {
         find = true;
         right = x;
@@ -85,7 +92,7 @@ async function crop(filename: string): void {
   
   for(let y = 1; y <= originalHeight; ++y) {
     let find = false;
-    for(let x = 1; x <= originalWidth; ++x) {
+    for(let x = left; x <= right; ++x) {
       if (originalImage.getPixelAt(x, y) !== FIRST_PIXEL) {
         find = true;
         top = y;
@@ -97,7 +104,7 @@ async function crop(filename: string): void {
 	
   for(let y = originalHeight; y >= top; --y) {
     let find = false;
-    for(let x = 1; x <= originalWidth; ++x) {
+    for(let x = left; x <= right; ++x) {
       if (originalImage.getPixelAt(x, y) !== FIRST_PIXEL) {
         find = true;
         bottom = y;
@@ -107,33 +114,19 @@ async function crop(filename: string): void {
     if (find) { break; }
   }
   
-	// crop(x, y, width, height)
-	// const x = 0;
-	// const y = 0;
-	// const width = originalWidth;
-	// const height = originalHeight;
-	// const goalImage: Image = originalImage.crop(left, right, right - left + 1, bottom - top + 1);
   left -= 1;
   top -= 1;
   const width = right - left;
   const height = bottom - top;
   // console.log({ left, right, top, bottom, width, height, originalWidth, originalHeight });
   
-  // 导出jpg成功（如果先crop后导出，则会报错：y越界）
-	// const goalImage2: Image = new Image(width, height);
-  // for(let x = 1; x <= width; ++x) {
-  //   for(let y = 1; y <= height; ++y) {
-  //     goalImage2.setPixelAt(x, y, originalImage.getPixelAt(x+left, y+top));
-  //   }
-  // }
-	// const encoded2 = await goalImage2.encodeJPEG();
-	// await Deno.writeFile(filename.replace('.png', '_cropped.jpg'), encoded2);
-  
-  // 这段导出的png图片为空白（尺寸合适，但所有像素都是空白）
-	// const goalImage: Image = originalImage.crop(left, right, right - left, bottom - top);
-	// const goalFileFullName: string = filename.replace('.png', '_cropped.png');
+  // <en>Error: Get blank png image</en>
+  // <zh_cn>错误：获得空白png图片</zh_cn>
+  // <zh_tw>錯誤：獲得空白png圖片</zh_tw>
+	// const goalImage = await originalImage.crop(left, right, right - left, bottom - top);
 	// const encoded = await goalImage.encode(1, {creationTime: 0, software: ''});
-	// await Deno.writeFile(goalFileFullName, encoded);
+	// // await Deno.writeFile(filename.replace('.png', '_cropped.png'), encoded);
+	// await Deno.writeFile(filename, encoded);
   
 	const goalImage: Image = new Image(width, height);
   for(let x = 1; x <= width; ++x) {

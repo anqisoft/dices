@@ -1,13 +1,69 @@
 import { DiceGenerator, DiceKind } from './dice.ts';
 import { AnQiData, getPageCss, parsePageParamsFromUrl } from './const.ts';
-import { getPageParameterByName } from './const.ts';
+import { getPageParameterByName, setF1Content } from './const.ts';
 import { createPageElement } from './dom.ts';
 
 (function drawDice() {
 	parsePageParamsFromUrl(window.location.href);
-
 	// A3, LANDSCAPE, PAGE_PADDING_TOP, PAGE_PADDING_LEFT, MM_TO_PX_SCALE, PX_TO_MM_SCALE, PAGE_WIDTH, PAGE_HEIGHT
 	const { A3, LANG, NO, LANDSCAPE } = (window as unknown as { anqiData: AnQiData }).anqiData;
+	switch(LANG) {
+		case 'en':
+		default:
+			setF1Content(`?a3=false&landscape=false&top=15&left=10&width=0&height=0&face=0&no=1&side=0&contents=&font_size=&outer_line_style=&inner_line_style=&text_style=
+a3: A3 or A4(default). Values: true or false.
+landscape: Landscape or portrait (default). Values: true or false.
+top: Top margin of the page, unit is mm, default value is 15.
+left: Left margin of the page, unit is mm, default value is 10.
+width: Width of paper, unit is mm, the default value is 0, which means use the default width.
+height: Height of paper, unit is mm, the default value is 0, which means the default height is used.
+face: Number of faces of the dice. Values: 4, 6, 8, 10, 12, 20, 24. The default value is 0, which is 4.
+no: The content number provided. Start from 1. The default value is 1.
+side: 0 means 10. The unit is mm.
+contents: Empty means the numbers from 1 to the face count of the dices. Use "," to separate values. If there are no delimiters, each character is one side of content.
+font_size: Empty means use the default value. You can use units such as px, mm, etc. If no unit is specified, mm will be used as the unit.
+outer_line_style: The style of the outer line. Empty means 'Stroke: #555; Stroke width: 0.2mm;'.
+inner_line_style: The style of the inner line. Empty means 'stroke:#888;stroke-width:0.1mm;stroke-dasharray:3 2;'.
+text_style: The style of the text. Empty means use the default value: 'font-family:"Times New Roman", "Kaiti";' and the font size is automatically calculated based on the number of faces and side lengths of the dice.
+			`);
+			break;
+		case 'zh_cn':
+			setF1Content(`?a3=false&landscape=false&top=15&left=10&width=0&height=0&face=0&no=1&side=0&contents=&font_size=&outer_line_style=&inner_line_style=&text_style=
+a3: A3或A4（默认）。true/false
+landscape: 横向或纵向（默认）。true/false
+top: 页面上边距，单位mm，默认15。
+left: 页面左边距，单位mm，默认10。
+width: 纸宽，单位mm，默认0表示使用默认值。
+height: 纸高，单位mm，默认0表示使用默认值。
+face: 骰子页数。4, 6, 8, 10, 12, 20, 24。默认0表示4。
+no: 使用指定序号的默认内容，从1开始，默认为0，各面为1到面数对应数字序列。
+side: 单位mm，默认0表示10。
+contents: 空表示各面为1到面数对应数字序列。使用英文逗号分隔，无分隔符则每字符为一个面内容。
+font_size: 空表示使用默认值。可使用px或mm等单位。无单位时以mm为单位。
+outer_line_style: 外框线与剪裁线线型。空表示使用默认值：'Stroke: #555; Stroke width: 0.2mm;'.
+inner_line_style: 内部折叠线线型。空表示使用默认值：'stroke:#888;stroke-width:0.1mm;stroke-dasharray:3 2;'.
+text_style: 文本样式，空表示使用默认值（Times New Roman或楷体字体，字号由骰子面数及边长自动计算）。
+			`);
+			break;
+		case 'zh_tw':
+			setF1Content(`?a3=false&landscape=false&top=15&left=10&width=0&height=0&face=0&no=1&side=0&contents=&font_size=&outer_line_style=&inner_line_style=&text_style=
+a3: A3或A4（默認）。true/false
+landscape:橫向或縱向（默認）。true/false
+top:頁面上邊距，組織mm，默認15。
+left:頁面左邊距，組織mm，默認10。
+width:紙寬，組織mm，默認0表示使用預設值。
+height:紙高，組織mm，默認0表示使用預設值。
+face:骰子頁數。 4，6，8，10，12，20，24。 默認0表示4。
+no:使用指定序號的默認內容，從1開始，默認為0，各面為1到面數對應數位序列。
+side:組織mm，默認0表示10。
+contents:空表示各面為1到面數對應數位序列。 使用英文逗號分隔，無分隔符則每字元為一個面內容。
+font_ size:空表示使用預設值。 可使用px或mm等組織。 無組織時以mm為組織。
+outer_ line_ style:外框線與剪裁線線型。 空表示使用預設值：'Stroke: #555； Stroke width: 0.2mm；'.
+inner_ line_ style:內部折疊線線型。 空表示使用預設值：'stroke:#888； stroke-width:0.1mm； stroke-dasharray:3 2；'.
+text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體字體，字型大小由骰子面數及邊長自動計算）。
+			`);
+			break;
+	}
 
 	// const url = window.location.href.replace('?', '&')
 	//   .replace(/&face=/gi, '&face=')
@@ -224,10 +280,10 @@ import { createPageElement } from './dom.ts';
 
 			// https://baike.baidu.com/item/%E5%AE%AB%E5%95%86%E8%A7%92%E5%BE%B5%E7%BE%BD/85388?fromtitle=%E5%8F%A4%E4%BB%A3%E4%BA%94%E9%9F%B3&fromid=10949417
 			// gōng shāng jué zhǐ yǔ
-			'ˉ宫、商、角、徵、羽、宫、商、角、徵、羽'.split('、'),
+			'宫、商、角、徵、羽、宫、商、角、徵、羽'.split('、'),
 			// 五行五音
-			'ˉ宫、商、角、徵、羽、水、火、木、金、土'.split('、'),
-			'ˉ宫、商、角、徵、羽、唇、舌、牙、齿、喉'.split('、'),
+			'宫、商、角、徵、羽、水、火、木、金、土'.split('、'),
+			'宫、商、角、徵、羽、唇、舌、牙、齿、喉'.split('、'),
 
 			// 五伦、五常
 			'父子有亲、君臣有义、夫妇有别、长幼有序、朋友有信、仁、义、礼、智、信'.split('、'),
@@ -318,8 +374,6 @@ import { createPageElement } from './dom.ts';
 		// '18': [],
 		// '19': [],
 		'20': [
-			'a,o,e,i,u,ü,ai,ei,ui,ao,ou,iu,ie,üe,er,an,en,in,un,ün,ang,eng,ing,ong'.replace(/a/g, 'ɑ')
-				.replace(/g/g, 'ɡ').split(','),
 			'zhi,chi,shi,ri,zi,ci,si,yi,wu,yu,ye,yue,yuan,yin,yun,ying,,,,'.replace(/a/g, 'ɑ').replace(
 				/g/g,
 				'ɡ',
@@ -403,7 +457,7 @@ import { createPageElement } from './dom.ts';
 	const SIDE_LENGTH = SIDE_IN_URL || 10;
 
 	const CONTENTS_IN_URL = getPageParameterByName('contents', '');
-	const CONTENTS = CONTENTS_IN_URL.length === 0 ? DEFAULT_CONTENTS : CONTENTS_IN_URL.split(',');
+	const CONTENTS = CONTENTS_IN_URL.length === 0 ? DEFAULT_CONTENTS : CONTENTS_IN_URL.split(CONTENTS_IN_URL.indexOf(',') > -1 ? ',' : '');
 
 	const diceGenerator = new DiceGenerator();
 

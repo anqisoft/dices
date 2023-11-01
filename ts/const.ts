@@ -224,9 +224,9 @@ export const getPageParameterByName = (
 	const REPLACED_CURRENT_URL = CURRENT_URL.replace('?', '&');
 	return REPLACED_CURRENT_URL.indexOf(`&${name}=`) === -1
 		? defaultValue || ''
-		: REPLACED_CURRENT_URL.split('&').slice(1).filter((keyValue: string) =>
+		: decodeURIComponent(REPLACED_CURRENT_URL.split('&').slice(1).filter((keyValue: string) =>
 			keyValue.startsWith(`${name}=`)
-		)[0].split('=')[1];
+		)[0].split('=')[1]);
 };
 
 /**
@@ -430,12 +430,14 @@ export function parsePageParamsFromUrl(url: string) {
 	const PAGE_PADDING_TOP = Math.max(
 		0,
 		// parseInt(url.concat('&top=4').replace('&top=', '厶').split('厶')[1].split('&')[0]),
-		parseFloat(url.concat('&top=3.5').replace('&top=', '厶').split('厶')[1].split('&')[0]),
+		// parseFloat(url.concat('&top=3.5').replace('&top=', '厶').split('厶')[1].split('&')[0]),
+		parseFloat(url.concat('&top=15').replace('&top=', '厶').split('厶')[1].split('&')[0]),
 	);
 	const PAGE_PADDING_LEFT = Math.max(
 		0,
 		// parseInt(url.concat('&left=3').replace('&left=', '厶').split('厶')[1].split('&')[0]),
-		parseFloat(url.concat('&left=3.5').replace('&left=', '厶').split('厶')[1].split('&')[0]),
+		// parseFloat(url.concat('&left=3.5').replace('&left=', '厶').split('厶')[1].split('&')[0]),
+		parseFloat(url.concat('&left=10').replace('&left=', '厶').split('厶')[1].split('&')[0]),
 	);
 
 	const NO = Math.max(

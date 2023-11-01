@@ -68,7 +68,7 @@ setlocal enabledelayedexpansion
 ::8 => 10
 ::10 => 22
 ::12 => 12
-::20 => 5
+::20 => 4
 ::24 => 8
 for %%l in (!langSet!) do (
   set lang=%%l
@@ -93,7 +93,7 @@ for %%l in (!langSet!) do (
       set max_no=12
     )
     if "!face!" == "20" (
-      set max_no=5
+      set max_no=4
     )
     if "!face!" == "24" (
       set max_no=8
@@ -119,7 +119,7 @@ for %%l in (!langSet!) do (
         if "!lang!:!face!:!no!:!landscape!" == "zh_tw:24:8:true" (
           set endChar=
         )
-        echo   { "url": "!url!?lang=!lang!&landscape=!landscape!&face=!face!&no=!no!&top=10&left=10", "pdf": "!pdfPath!!lang!\\!pdfFile!\\!face!_!no!.pdf", "params": { } }!endChar!>>%goal%
+        echo   { "url": "!url!?lang=!lang!&landscape=!landscape!&face=!face!&no=!no!", "pdf": "!pdfPath!!lang!\\!pdfFile!\\!face!_!no!.pdf", "params": { } }!endChar!>>%goal%
       )
     )
   )

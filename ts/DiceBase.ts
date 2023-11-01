@@ -71,7 +71,7 @@ export default abstract class DiceBase {
 		if (this.TEXT_STYLE.length === 0) {
 			const { FONT_SIZE } = this.OPTIONS as unknown as { FONT_SIZE: string };
 			if (FONT_SIZE.length) {
-				this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${FONT_SIZE.match(/[\-0-9\.]+/) ? FONT_SIZE.concat('mm') : FONT_SIZE};`;
+				this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${/^[0-9\.]+$/.test(FONT_SIZE) ? FONT_SIZE.concat('mm') : FONT_SIZE};`;
 			} else {
 				this.TEXT_STYLE = `font-family:"Times New Roman", "Kaiti";font-size:${
 					this.SIDE_LENGTH * scale

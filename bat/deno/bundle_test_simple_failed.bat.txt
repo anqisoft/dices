@@ -1,0 +1,5 @@
+@echo off
+:: call %pwd%..\..\test\bat\compressJs.bat failed.
+::set pwd=%cd%\
+_bundle_test_core simple
+::call %pwd%..\..\test\bat\compressJs.bat
