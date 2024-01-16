@@ -1,5 +1,5 @@
 import DiceBase from './DiceBase.ts';
-import { I18nable } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
+import { I18nable } from '../node_modules/@dishanqian/h5_base/types/index.d.ts';
 
 export default class DiceFace10 extends DiceBase {
 	// constructor(

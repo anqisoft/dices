@@ -63,6 +63,7 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
             break;
     }
     const FONT_SIZE = getPageParameterByName('font_size', '');
+    const DEBUGGING = getPageParameterByName('debug', 'false') === 'true';
     const FACE_IN_URL = parseInt(getPageParameterByName('face', '0'));
     const FACE = FACE_IN_URL || 4;
     const FACE_STRING = FACE.toString();
@@ -72,11 +73,8 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
         '8': DiceKind.eight,
         '10': DiceKind.ten,
         '12': DiceKind.twelve,
-        '14': DiceKind.fourteen,
-        '16': DiceKind.sixteen,
         '20': DiceKind.twenty,
         '24': DiceKind.twentyFour,
-        '26': DiceKind.twentySix,
         '60': DiceKind.sixty
     };
     const CONTENTS_MAP = {
@@ -273,6 +271,11 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
             'ā,á,ǎ,à,ō,ó,ǒ,ò,ē,é,ě,è,ī,í,ǐ,ì,ū,ú,ǔ,ù,ǖ,ǘ,ǚ,ǜ'.split(',')
         ]
     };
+    if (DEBUGGING) {
+        for(const index in CONTENTS_MAP){
+            console.log(`${index} => ${CONTENTS_MAP[index].length + 3}`);
+        }
+    }
     const diceKind = DICE_KIND_MAP[FACE_STRING];
     const DEFAULT_CONTENTS = [];
     switch(NO){

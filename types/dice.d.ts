@@ -1,4 +1,4 @@
-import { I18nable } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
+import { I18nable } from '../node_modules/@dishanqian/h5_base/types/index.d.ts';
 /**
  * <en>Dice Type</en>
  * <zh_cn>骰子类型</zh_cn>

@@ -1,5 +1,5 @@
 import { DiceGenerator, DiceKind } from '../types/dice.d.ts';
-import { AnQiData, getPageCss, parsePageParamsFromUrl, getPageParameterByName, setF1Content, createPageElement } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
+import { AnQiData, getPageCss, parsePageParamsFromUrl, getPageParameterByName, setF1Content, createPageElement } from '../node_modules/@dishanqian/h5_base/types/index.d.ts';
 
 (function drawDice() {
 	parsePageParamsFromUrl(window.location.href);
@@ -74,6 +74,7 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
 	//   .replace(/&text_style=/gi, '&text_style=')
 	// ;
 	const FONT_SIZE = getPageParameterByName('font_size', '');
+	const DEBUGGING = getPageParameterByName('debug', 'false') === 'true';
 
 	const FACE_IN_URL = parseInt(getPageParameterByName('face', '0'));
 	const FACE = FACE_IN_URL || 4;
@@ -93,15 +94,15 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
 		// '11': DiceKind.eleven,
 		'12': DiceKind.twelve,
 		// '13': DiceKind.thirteen,
-		'14': DiceKind.fourteen,
+		// '14': DiceKind.fourteen,
 		// '15': DiceKind.fifteen,
-		'16': DiceKind.sixteen,
+		// '16': DiceKind.sixteen,
 		// '17': DiceKind.seventeen,
 		// '18': DiceKind.eighteen,
 		// '19': DiceKind.nineteen,
 		'20': DiceKind.twenty,
 		'24': DiceKind.twentyFour,
-		'26': DiceKind.twentySix,
+		// '26': DiceKind.twentySix,
 		// '30': DiceKind.thirty,
 		'60': DiceKind.sixty,
 		// '100': DiceKind.oneHundred,
@@ -184,14 +185,6 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
 			'江苏金山寺、福建普陀寺、河南文殊寺、江苏大明寺'.split('、'),
 			'山西五台山、四川峨眉山、浙江普陀山、安徽九华山'.split('、'),
 			'河北山海关、甘肃嘉峪关、甘肃玉门关、广西友谊关'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
-			// '、、、'.split('、'),
 		],
 		// '5': [],
 		'6': [
@@ -202,23 +195,6 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
 			'阴阳、儒、墨、名、法、道德'.split('、'),
 			'诗、书、礼、易、乐、春秋'.split('、'),
 			'文韬、武韬、龙韬、虎韬、豹韬、犬韬'.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
-			// ''.split('、'),
 		],
 		// '7': [],
 		'8': [
@@ -416,9 +392,13 @@ text_ style:文字樣式，空表示使用預設值（Times New Roman或楷體�
 		//   // ''.split('、'),
 		// ],
 	};
-	// for (const index in CONTENTS_MAP) {
-	// 	console.log(`${index} => ${(CONTENTS_MAP as any)[index].length + 3}`);
-	// }
+
+	if(DEBUGGING) {
+		for (const index in CONTENTS_MAP) {
+			console.log(`${index} => ${(CONTENTS_MAP as any)[index].length + 3}`);
+		}
+	}
+
 	const diceKind = (DICE_KIND_MAP as any)[FACE_STRING];
 
 	const DEFAULT_CONTENTS = [];

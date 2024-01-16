@@ -1,4 +1,4 @@
-import { I18nable, SvgHelper } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
+import { I18nable, SvgHelper } from '../node_modules/@dishanqian/h5_base/types/index.d.ts';
 export default abstract class DiceBase {
     protected svg: SVGElement;
     protected SIDE_LENGTH: number;

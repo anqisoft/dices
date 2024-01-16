@@ -1,4 +1,4 @@
-import { createElement, I18nable, SVG_NS, SVG_XLINKNS, SvgTextInfo, DPIHelper } from '../node_modules/@dishanqian/h5-base/types/index.d.ts';
+import { createElement, I18nable, SVG_NS, SVG_XLINKNS, SvgTextInfo, DPIHelper } from '../node_modules/@dishanqian/h5_base/types/index.d.ts';
 
 import DiceFace4 from './DiceFace4.ts';
 import DiceFace6 from './DiceFace6.ts';
@@ -7,12 +7,12 @@ import DiceFace12 from './DiceFace12.ts';
 import DiceFace20 from './DiceFace20.ts';
 
 import DiceFace24 from './DiceFace24.ts';
-
 import DiceFace10 from './DiceFace10.ts';
-import DiceFace14 from './DiceFace14.ts';
-import DiceFace16 from './DiceFace16.ts';
-import DiceFace26 from './DiceFace26.ts';
-import DiceFace60 from './DiceFace60.ts';
+
+// import DiceFace14 from './DiceFace14.ts';
+// import DiceFace16 from './DiceFace16.ts';
+// import DiceFace26 from './DiceFace26.ts';
+// import DiceFace60 from './DiceFace60.ts';
 
 // /// <reference path='../types/dom.d.ts' />
 // /// <reference path='../types/DPIHelper.d.ts' />

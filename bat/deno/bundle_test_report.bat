@@ -1,5 +1,5 @@
 set pwd=%cd%\
-set filename=simple
+set filename=report
 
 start "" _bundle_test_core %filename%
 ping 127.0.0.1 -n 3 >nul
